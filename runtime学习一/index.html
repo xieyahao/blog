@@ -177,7 +177,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-05-29 18:33:19'>2020-05-28 15:43</time>
+            Created At : <time class="date" title='Updated At: 2020-05-30 21:18:59'>2020-05-28 15:43</time>
         
     </div>
     <div class="article-meta">
@@ -256,7 +256,7 @@ struct bucket_t {
 }</code></pre><p><img src="./pic/cache_t%E7%B1%BB%E5%9B%BE.png" alt="cache_t类图.png"><br>mask：分配用来缓存bucket的总数。<br>occupied：表明目前实际占用的缓存bucket的个数。</p>
 <p>bucket_t的结构体中存储了一个unsigned long和一个IMP。IMP是一个函数指针，指向了一个方法的具体实现。<br>Cache的作用主要是为了优化方法调用的性能。使用Cache来缓存经常调用的方法，当调用方法时，优先在Cache查找，如果没有找到，再到methodLists查找。</p>
 <p>4.class_data_bits_t的具体实现</p>
-<p><img src="./pic/class_rw_t%E7%9A%84%E4%BD%BF%E7%94%A8.png" alt="class_rw_t的使用.png"></p>
+<p><img src="./runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/class_rw_t%E7%9A%84%E4%BD%BF%E7%94%A8.png" alt="class_rw_t的使用.png"></p>
 <p>class_rw_t 与 class_ro_t </p>
 <p><img src="./pic/class_rw_t%E4%B8%8Eclass_ro_t1.png" alt="class_rw_t与class_ro_t1.png.png"></p>
 <p>class_ro_t定义源码</p>
