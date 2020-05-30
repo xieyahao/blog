@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>yahao‘s note</title>
+  <title>myBlog/runtime学习 | yahao‘s note</title>
   <meta name="keywords" content="">
-  <meta name="description" content="yahao‘s note">
+  <meta name="description" content="myBlog/runtime学习 | yahao‘s note">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="runtimeruntime 又叫运行时，是一套底层C语言APi。一、类、对象 、函数1 、类 objc_class 在OC的世界中，除了NSProxy类以外，所有的类都是NSObject的子类。在NSObject中观察到，  看下class  &#x2F;&#x2F;&#x2F; An opaque type that represents an Objective-C class. typedef struct objc_">
 <meta property="og:type" content="article">
@@ -66,7 +66,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/blog/" class="avatar_target">
     <img class="avatar" src="/blog/img/avatar.jpg" />
@@ -187,12 +187,43 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-myBlog/runtime学习" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于我"><span class="toc-text">关于我</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#博客平台"><span class="toc-text">博客平台</span></a></li></ol>
+        <h1 class="article-title">myBlog/runtime学习</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2020-05-29 18:33:19'>2020-05-28 15:43</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#runtime"><span class="toc-text">runtime</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#runtime-又叫运行时，是一套底层C语言APi。"><span class="toc-text">runtime 又叫运行时，是一套底层C语言APi。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一、类、对象-、函数"><span class="toc-text">一、类、对象 、函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-、类-objc-class"><span class="toc-text">1 、类 objc_class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、元类（meta-class）"><span class="toc-text">2、元类（meta class）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、对象id-–-gt-objc-object"><span class="toc-text">3、对象id –&gt; objc_object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、objc-class中-cache-t-的实现"><span class="toc-text">4、objc_class中 cache_t 的实现</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -205,24 +236,86 @@
     }
 </style>
 </div>
-            <h2 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h2><p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 生成，部署在 <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a>主题 <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank" rel="noopener">3-hexo</a> 已经在github上开源</p>
-<p><code>3-hexo</code> 主题使用交流可以加 Q群: <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=e8cf083cc097141eaf323396f1766809b8e90ff00c67bb441898f672892f6904"><img data-ignore border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="3-hexo使用交流" title="3-hexo使用交流"></a></p>
-<p>主要功能：</p>
-<ul>
-<li>搜索支持文章标题、标签(#标签)、作者(@作者)</li>
-<li>pad/手机等移动端适配</li>
-<li>页面全局快捷键 <a href='http://yelog.org/2017/03/24/3-hexo-shortcuts/' target="_blank" rel="noopener">3-hexo快捷键说明</a></li>
-</ul>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="runtime"><a href="#runtime" class="headerlink" title="runtime"></a>runtime</h1><h2 id="runtime-又叫运行时，是一套底层C语言APi。"><a href="#runtime-又叫运行时，是一套底层C语言APi。" class="headerlink" title="runtime 又叫运行时，是一套底层C语言APi。"></a>runtime 又叫运行时，是一套底层C语言APi。</h2><h2 id="一、类、对象-、函数"><a href="#一、类、对象-、函数" class="headerlink" title="一、类、对象 、函数"></a>一、类、对象 、函数</h2><h3 id="1-、类-objc-class"><a href="#1-、类-objc-class" class="headerlink" title="1 、类 objc_class"></a>1 、类 objc_class</h3><p> 在OC的世界中，除了NSProxy类以外，所有的类都是NSObject的子类。在NSObject中观察到，</p>
+<p><img src="./pic/NSObject%E7%B1%BB%E5%AE%9A%E4%B9%89%E6%88%AA%E5%9B%BE.png" alt="NSObject类定义截图.png"></p>
+<p>看下class</p>
+<pre><code> /// An opaque type that represents an Objective-C class.
+typedef struct objc_class *Class;</code></pre><p>Objc2.0 后，objc_class的定义：<br><img src="./pic/objc_class%E5%AE%9A%E4%B9%89.png" alt="objc_class定义.png"><br><img src="./pic/objc_class%E7%B1%BB%E5%9B%BE.png" alt="objc_class类图.png"></p>
+<h3 id="2、元类（meta-class）"><a href="#2、元类（meta-class）" class="headerlink" title="2、元类（meta class）"></a>2、元类（meta class）</h3><p>元类的引入，是为了和对象查找方法的机制一致。<br>对象的实例方法调用时，通过对象的 isa 在类中获取方法的实现。类对象的类方法调用时，通过类的 isa 在元类中获取方法的实现。</p>
+<p><img src="./pic/isa_class_metaClass.png" alt="isa_class_metaClass.png"></p>
+<p>a.Root class (class)其实就是NSObject，NSObject是没有超类的，所以Root class(class)的superclass指向nil。<br>b.每个Class都有一个isa指针指向唯一的Meta class<br>c.Root class(meta)的superclass指向Root class(class)，也就是NSObject，形成一个回路。<br>d.每个Meta class的isa指针都指向Root class (meta)。</p>
+<h3 id="3、对象id-–-gt-objc-object"><a href="#3、对象id-–-gt-objc-object" class="headerlink" title="3、对象id –&gt; objc_object"></a>3、对象id –&gt; objc_object</h3><pre><code>struct objc_object {
+private:
+isa_t isa;
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+public:
+// initIsa() should be used to init the isa of new objects only.
+// If this object already has an isa, use changeIsa() for correctness.
+// initInstanceIsa(): objects with no custom RR/AWZ
+void initIsa(Class cls /*indexed=false*/);
+void initInstanceIsa(Class cls, bool    hasCxxDtor);
+
+private:
+void initIsa(Class newCls, bool indexed, bool hasCxxDtor);
+｝</code></pre><p>isa_t 是一个union联合体。初始化isa时，对于64位的引入，为了节省内存和提高执行效率，苹果提出了tagged pointer.</p>
+<h3 id="4、objc-class中-cache-t-的实现"><a href="#4、objc-class中-cache-t-的实现" class="headerlink" title="4、objc_class中 cache_t 的实现"></a>4、objc_class中 cache_t 的实现</h3><pre><code>struct cache_t {
+  struct bucket_t *_buckets;
+  mask_t _mask;
+  mask_t _occupied;
+}
+
+typedef unsigned int uint32_t;
+typedef uint32_t mask_t;  // x86_64 &amp; arm64 asm are less efficient with 16-bits
+
+typedef unsigned long  uintptr_t;
+typedef uintptr_t cache_key_t;
+
+struct bucket_t {
+  private:
+  cache_key_t _key;
+  IMP _imp;
+}</code></pre><p><img src="./pic/cache_t%E7%B1%BB%E5%9B%BE.png" alt="cache_t类图.png"><br>mask：分配用来缓存bucket的总数。<br>occupied：表明目前实际占用的缓存bucket的个数。</p>
+<p>bucket_t的结构体中存储了一个unsigned long和一个IMP。IMP是一个函数指针，指向了一个方法的具体实现。<br>Cache的作用主要是为了优化方法调用的性能。使用Cache来缓存经常调用的方法，当调用方法时，优先在Cache查找，如果没有找到，再到methodLists查找。</p>
+<p>4.class_data_bits_t的具体实现</p>
+<p><img src="./pic/class_rw_t%E7%9A%84%E4%BD%BF%E7%94%A8.png" alt="class_rw_t的使用.png"></p>
+<p>class_rw_t 与 class_ro_t </p>
+<p><img src="./pic/class_rw_t%E4%B8%8Eclass_ro_t1.png" alt="class_rw_t与class_ro_t1.png.png"></p>
+<p>class_ro_t定义源码</p>
+<p><img src="./pic/class_ro_t%E5%AE%9A%E4%B9%89.png" alt="class_ro_t定义"></p>
+<p>class_rw_t定义源码</p>
+<p><img src="./pic/class_rw_t%E5%AE%9A%E4%B9%89.png" alt="class_rw_t定义"></p>
+<p>总结起来的类图</p>
+<p><img src="./pic/class_data_bits_t%E7%B1%BB%E5%9B%BE.png" alt="class_data_bits_t类图.png"></p>
+<p>ObjC 类中的属性、方法还有遵循的协议等信息都保存在 class_rw_t 中。class_rw_t中还有一个指向常量的指针 ro，其中存储了当前类在编译期就已经确定的属性、方法以及遵循的协议。。</p>
+<p>在编译期类的结构中的 class_data_bits_t *data指向的是一个 class_ro_t *指针， 类图如下：<br><img src="./pic/%E7%BC%96%E8%AF%91%E6%9C%9Fbit%E6%8C%87%E5%90%91%E7%B1%BB%E5%9B%BE.png" alt="编译期bit指向类图.png"></p>
+<p>在运行期间，执行 realizeClass 后（我暂时还没找到realizeClass的源码，粘一个网上找的 ，便于理解）<br>realizeClass部分源码<br><img src="./pic/realizeClass%E6%BA%90%E7%A0%81.png" alt="realizeClass源码.png"></p>
+<p>再去检查是否有分类，同时将分类的方法，属性，协议列表整合存储在class_rw_t的方法，属性及协议列表中。<br>运行期bit指向类图；<br><img src="./pic/%E8%BF%90%E8%A1%8C%E6%9C%9Fbit%E6%8C%87%E5%90%91%E7%B1%BB%E5%9B%BE.png" alt="运行期bit指向类图.png"></p>
+<p>关于验证可参考 <a href="https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构" target="_blank" rel="noopener">https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构</a> </p>
+<p>参考：<a href="https://halfrost.com/objc_runtime_isa_class/" target="_blank" rel="noopener">https://halfrost.com/objc_runtime_isa_class/</a><br><a href="https://www.jianshu.com/p/4546f22b2e96" target="_blank" rel="noopener">https://www.jianshu.com/p/4546f22b2e96</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -231,11 +324,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>
