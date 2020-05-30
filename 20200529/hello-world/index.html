@@ -2,14 +2,14 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>runtime学习 | yahao‘s note</title>
+  <title>Hello World | yahao‘s note</title>
   <meta name="keywords" content="">
-  <meta name="description" content="runtime学习 | yahao‘s note">
+  <meta name="description" content="Hello World | yahao‘s note">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/blog/2020/05/29/hello-world/index.html">
+<meta property="og:url" content="https://xieyahao.github.io/blog/20200529/hello-world/index.html">
 <meta property="og:site_name" content="yahao‘s note">
 <meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
 <meta property="og:locale" content="en_US">
@@ -141,7 +141,7 @@
         </a>
         
         <a  class="All "
-           href="../../28/runtime%E5%AD%A6%E4%B9%A0/"
+           href="../../20200528/runtime%E5%AD%A6%E4%B9%A0/"
            data-tag=""
            data-author="" >
             <span class="post-title" title="runtime学习">runtime学习</span>
@@ -165,9 +165,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-runtime学习" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">runtime学习</h1>
+        <h1 class="article-title">Hello World</h1>
     
     <div class="article-meta">
         
@@ -177,7 +177,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-05-29 18:33:19'>2020-05-28 15:43</time>
+            Created At : <time class="date" title='Updated At: 2020-05-29 18:29:00'>2020-05-29 18:29</time>
         
     </div>
     <div class="article-meta">
@@ -199,7 +199,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#runtime"><span class="toc-text">runtime</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#runtime-又叫运行时，是一套底层C语言APi。"><span class="toc-text">runtime 又叫运行时，是一套底层C语言APi。</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一、类、对象-、函数"><span class="toc-text">一、类、对象 、函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-、类-objc-class"><span class="toc-text">1 、类 objc_class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、元类（meta-class）"><span class="toc-text">2、元类（meta class）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、对象id-–-gt-objc-object"><span class="toc-text">3、对象id –&gt; objc_object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、objc-class中-cache-t-的实现"><span class="toc-text">4、objc_class中 cache_t 的实现</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -215,62 +215,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="runtime"><a href="#runtime" class="headerlink" title="runtime"></a>runtime</h1><h2 id="runtime-又叫运行时，是一套底层C语言APi。"><a href="#runtime-又叫运行时，是一套底层C语言APi。" class="headerlink" title="runtime 又叫运行时，是一套底层C语言APi。"></a>runtime 又叫运行时，是一套底层C语言APi。</h2><h2 id="一、类、对象-、函数"><a href="#一、类、对象-、函数" class="headerlink" title="一、类、对象 、函数"></a>一、类、对象 、函数</h2><h3 id="1-、类-objc-class"><a href="#1-、类-objc-class" class="headerlink" title="1 、类 objc_class"></a>1 、类 objc_class</h3><p> 在OC的世界中，除了NSProxy类以外，所有的类都是NSObject的子类。在NSObject中观察到，</p>
-<p><img src="./pic/NSObject%E7%B1%BB%E5%AE%9A%E4%B9%89%E6%88%AA%E5%9B%BE.png" alt="NSObject类定义截图.png"></p>
-<p>看下class</p>
-<pre><code> /// An opaque type that represents an Objective-C class.
-typedef struct objc_class *Class;</code></pre><p>Objc2.0 后，objc_class的定义：<br><img src="./pic/objc_class%E5%AE%9A%E4%B9%89.png" alt="objc_class定义.png"><br><img src="./pic/objc_class%E7%B1%BB%E5%9B%BE.png" alt="objc_class类图.png"></p>
-<h3 id="2、元类（meta-class）"><a href="#2、元类（meta-class）" class="headerlink" title="2、元类（meta class）"></a>2、元类（meta class）</h3><p>元类的引入，是为了和对象查找方法的机制一致。<br>对象的实例方法调用时，通过对象的 isa 在类中获取方法的实现。类对象的类方法调用时，通过类的 isa 在元类中获取方法的实现。</p>
-<p><img src="./pic/isa_class_metaClass.png" alt="isa_class_metaClass.png"></p>
-<p>a.Root class (class)其实就是NSObject，NSObject是没有超类的，所以Root class(class)的superclass指向nil。<br>b.每个Class都有一个isa指针指向唯一的Meta class<br>c.Root class(meta)的superclass指向Root class(class)，也就是NSObject，形成一个回路。<br>d.每个Meta class的isa指针都指向Root class (meta)。</p>
-<h3 id="3、对象id-–-gt-objc-object"><a href="#3、对象id-–-gt-objc-object" class="headerlink" title="3、对象id –&gt; objc_object"></a>3、对象id –&gt; objc_object</h3><pre><code>struct objc_object {
-private:
-isa_t isa;
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 
-public:
-// initIsa() should be used to init the isa of new objects only.
-// If this object already has an isa, use changeIsa() for correctness.
-// initInstanceIsa(): objects with no custom RR/AWZ
-void initIsa(Class cls /*indexed=false*/);
-void initInstanceIsa(Class cls, bool    hasCxxDtor);
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 
-private:
-void initIsa(Class newCls, bool indexed, bool hasCxxDtor);
-｝</code></pre><p>isa_t 是一个union联合体。初始化isa时，对于64位的引入，为了节省内存和提高执行效率，苹果提出了tagged pointer.</p>
-<h3 id="4、objc-class中-cache-t-的实现"><a href="#4、objc-class中-cache-t-的实现" class="headerlink" title="4、objc_class中 cache_t 的实现"></a>4、objc_class中 cache_t 的实现</h3><pre><code>struct cache_t {
-  struct bucket_t *_buckets;
-  mask_t _mask;
-  mask_t _occupied;
-}
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
-typedef unsigned int uint32_t;
-typedef uint32_t mask_t;  // x86_64 &amp; arm64 asm are less efficient with 16-bits
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
-typedef unsigned long  uintptr_t;
-typedef uintptr_t cache_key_t;
-
-struct bucket_t {
-  private:
-  cache_key_t _key;
-  IMP _imp;
-}</code></pre><p><img src="./pic/cache_t%E7%B1%BB%E5%9B%BE.png" alt="cache_t类图.png"><br>mask：分配用来缓存bucket的总数。<br>occupied：表明目前实际占用的缓存bucket的个数。</p>
-<p>bucket_t的结构体中存储了一个unsigned long和一个IMP。IMP是一个函数指针，指向了一个方法的具体实现。<br>Cache的作用主要是为了优化方法调用的性能。使用Cache来缓存经常调用的方法，当调用方法时，优先在Cache查找，如果没有找到，再到methodLists查找。</p>
-<p>4.class_data_bits_t的具体实现</p>
-<p><img src="./pic/class_rw_t%E7%9A%84%E4%BD%BF%E7%94%A8.png" alt="class_rw_t的使用.png"></p>
-<p>class_rw_t 与 class_ro_t </p>
-<p><img src="./pic/class_rw_t%E4%B8%8Eclass_ro_t1.png" alt="class_rw_t与class_ro_t1.png.png"></p>
-<p>class_ro_t定义源码</p>
-<p><img src="./pic/class_ro_t%E5%AE%9A%E4%B9%89.png" alt="class_ro_t定义"></p>
-<p>class_rw_t定义源码</p>
-<p><img src="./pic/class_rw_t%E5%AE%9A%E4%B9%89.png" alt="class_rw_t定义"></p>
-<p>总结起来的类图</p>
-<p><img src="./pic/class_data_bits_t%E7%B1%BB%E5%9B%BE.png" alt="class_data_bits_t类图.png"></p>
-<p>ObjC 类中的属性、方法还有遵循的协议等信息都保存在 class_rw_t 中。class_rw_t中还有一个指向常量的指针 ro，其中存储了当前类在编译期就已经确定的属性、方法以及遵循的协议。。</p>
-<p>在编译期类的结构中的 class_data_bits_t *data指向的是一个 class_ro_t *指针， 类图如下：<br><img src="./pic/%E7%BC%96%E8%AF%91%E6%9C%9Fbit%E6%8C%87%E5%90%91%E7%B1%BB%E5%9B%BE.png" alt="编译期bit指向类图.png"></p>
-<p>在运行期间，执行 realizeClass 后（我暂时还没找到realizeClass的源码，粘一个网上找的 ，便于理解）<br>realizeClass部分源码<br><img src="./pic/realizeClass%E6%BA%90%E7%A0%81.png" alt="realizeClass源码.png"></p>
-<p>再去检查是否有分类，同时将分类的方法，属性，协议列表整合存储在class_rw_t的方法，属性及协议列表中。<br>运行期bit指向类图；<br><img src="./pic/%E8%BF%90%E8%A1%8C%E6%9C%9Fbit%E6%8C%87%E5%90%91%E7%B1%BB%E5%9B%BE.png" alt="运行期bit指向类图.png"></p>
-<p>关于验证可参考 <a href="https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构" target="_blank" rel="noopener">https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构</a> </p>
-<p>参考：<a href="https://halfrost.com/objc_runtime_isa_class/" target="_blank" rel="noopener">https://halfrost.com/objc_runtime_isa_class/</a><br><a href="https://www.jianshu.com/p/4546f22b2e96" target="_blank" rel="noopener">https://www.jianshu.com/p/4546f22b2e96</a></p>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
