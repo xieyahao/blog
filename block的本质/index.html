@@ -69,7 +69,7 @@
 
 
 <ul>
-    <li><div class="all active" data-rel="全部文章">全部文章<small>(3)</small></div></li>
+    <li><div class="all active" data-rel="All">All<small>(3)</small></div></li>
     
 </ul>
 <div class="left-bottom">
@@ -79,7 +79,7 @@
     
     
     </div>
-    <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
+    <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="3">
 
@@ -92,7 +92,7 @@
     <div class="nav-right">
         <div class="friends-area">
     <div class="friends-title">
-        友情链接
+        Links
         <i class="iconfont icon-left"></i>
     </div>
     <div class="friends-content">
@@ -105,7 +105,7 @@
     <div class="right-top">
         <div id="default-panel">
             <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
-            <div class="right-title">全部文章</div>
+            <div class="right-title">All</div>
             <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
         </div>
         <div id="search-panel">
@@ -132,7 +132,7 @@
     
     <nav id="title-list-nav">
         
-        <a  class="全部文章 "
+        <a  class="All "
            href="/blog/hello-world/"
            data-tag=""
            data-author="" >
@@ -140,7 +140,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="全部文章 "
+        <a  class="All "
            href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
            data-tag=""
            data-author="" >
@@ -148,7 +148,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="全部文章 "
+        <a  class="All "
            href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
            data-tag=""
            data-author="" >
@@ -185,14 +185,14 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2020-06-08 18:48:16'>2020-05-29 18:29</time>
+            Created At : <time class="date" title='Updated At: 2020-06-09 10:07:17'>2020-05-29 18:29</time>
         
     </div>
     <div class="article-meta">
         
         
         <span id="busuanzi_container_page_pv">
-            阅读 :<span id="busuanzi_value_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
                 <span class="count-comment">
                     <span class="spinner">
                       <div class="cube1"></div>
@@ -277,10 +277,12 @@
 <p>同样转化为c++代码查看其内部结构:</p>
 <img src="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/block%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8Fself%E5%BC%95%E7%94%A8%E6%BA%90%E7%A0%81.png" class="" title="block实例变量self引用源码.png">
 <p>上图中可以发现，self同样被block捕获，接着我们找到test方法可以发现，test方法默认传递了两个参数self和_cmd。而类方法test2也同样默认传递了类对象self和方法选择器_cmd.</p>
-<p>![类方法与实例方法参数的对比.png](block的本质/类方法与实例方法参数的对比.png<br>g)<br>不论对象方法还是类方法都会默认将self作为参数传递给方法内部，既然是作为参数传入，那么self肯定是局部变量。上面讲到局部变量肯定会被block捕获。</p>
+<img src="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/%E7%B1%BB%E6%96%B9%E6%B3%95%E4%B8%8E%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E7%9A%84%E5%AF%B9%E6%AF%94.png" class="" title="类方法与实例方法参数的对比.png">
+<p>不论对象方法还是类方法都会默认将self作为参数传递给方法内部，既然是作为参数传入，那么self肯定是局部变量。上面讲到局部变量肯定会被block捕获。</p>
 <p>接下来看下，如果在block中使用成员变量或者调用实例的属性会有什么不同的结果：<br>修改test方法：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)test</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">void</span>(^block)(<span class="keyword">void</span>) = ^&#123;</span><br><span class="line">        NSLog(@<span class="string">"%@"</span>,self.name);</span><br><span class="line">        NSLog(@<span class="string">"%@"</span>,self-&gt;_name);</span><br><span class="line">    &#125;;</span><br><span class="line">    block();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>![属性和实例变量不同获取方式对比.png](block的本质/属性和实例变量不同获取方式对比.png）<br>上图中可以发现，即使block中使用的是实例对象的属性，block中捕获的仍然是实例对象self，并通过实例对象通过不同的方式去获取使用到的属性。</p>
+<img src="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/%E5%B1%9E%E6%80%A7%E5%92%8C%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F%E4%B8%8D%E5%90%8C%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94.png" class="" title="属性和实例变量不同获取方式对比.png">
+<p>上图中可以发现，即使block中使用的是实例对象的属性，block中捕获的仍然是实例对象self，只是实例对象self通过不同的方式去获取使用到的属性。</p>
 <h2 id="三、block的类型"><a href="#三、block的类型" class="headerlink" title="三、block的类型"></a>三、block的类型</h2><h3 id="1、block对象是什么类型呢？"><a href="#1、block对象是什么类型呢？" class="headerlink" title="1、block对象是什么类型呢？"></a>1、block对象是什么类型呢？</h3><p>首先知道了block 指针是 指向_NSConcreteStackBlock类对象地址的。那么block是否就是_NSConcreteStackBlock类型的呢？</p>
 <p>通过代码用class方法或者isa指针查看具体类型。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        <span class="comment">// __NSGlobalBlock__ : __NSGlobalBlock : NSBlock : NSObject</span></span><br><span class="line">        <span class="keyword">void</span> (^block)(<span class="keyword">void</span>) = ^&#123;</span><br><span class="line">            NSLog(@<span class="string">"Hello"</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">                </span><br><span class="line">        NSLog(@<span class="string">"%@"</span>, [block class]);</span><br><span class="line">        NSLog(@<span class="string">"%@"</span>, [[block class] superclass]);</span><br><span class="line">        NSLog(@<span class="string">"%@"</span>, [[[block class] superclass] superclass]);</span><br><span class="line">        NSLog(@<span class="string">"%@"</span>, [[[[block class] superclass] superclass] superclass]);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 2020-06-08 17:20:23.811767+0800 myRuntimeStudy[28481:6550993] __NSGlobalBlock__</span></span><br><span class="line"><span class="comment">// 2020-06-08 17:20:23.816262+0800 myRuntimeStudy[28481:6550993] __NSGlobalBlock</span></span><br><span class="line"><span class="comment">// 2020-06-08 17:20:23.816409+0800 myRuntimeStudy[28481:6550993] NSBlock</span></span><br><span class="line"><span class="comment">// 2020-06-08 17:20:23.816558+0800 myRuntimeStudy[28481:6550993] NSObject</span></span><br></pre></td></tr></table></figure>
@@ -304,7 +306,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">     <span class="comment">// Global：没有访问auto变量：__NSGlobalBlock__</span></span><br><span class="line">        <span class="keyword">void</span> (^block1)(<span class="keyword">void</span>) = ^&#123;</span><br><span class="line">            NSLog(@<span class="string">"block1---------"</span>);</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="comment">// Stack：访问了auto变量： __NSStackBlock__</span></span><br><span class="line">            <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">            <span class="keyword">void</span> (^block2)(<span class="keyword">void</span>) = ^&#123;</span><br><span class="line">                NSLog(@<span class="string">"block2---------%d"</span>, a);</span><br><span class="line">            &#125;;</span><br><span class="line">            NSLog(@<span class="string">"%@ %@"</span>, [block1 class], [block2 class]);</span><br><span class="line">            <span class="comment">// __NSStackBlock__调用copy ： __NSMallocBlock__</span></span><br><span class="line">            NSLog(@<span class="string">"%@"</span>, [[block2 copy] class]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//log:</span></span><br><span class="line"><span class="comment">//2020-06-08 18:08:24.562043+0800 myRuntimeStudy[28705:6574673] __NSGlobalBlock__ __NSStackBlock__</span></span><br><span class="line"><span class="comment">// 2020-06-08 18:08:24.562781+0800 myRuntimeStudy[28705:6574673] __NSMallocBlock__</span></span><br></pre></td></tr></table></figure>
 <p>通过打印的内容可以发现正如上图中所示。<br>没有访问auto变量的block是<strong>NSGlobalBlock</strong>类型的，存放在数据段中。<br>访问了auto变量的block是<strong>NSStackBlock</strong>类型的，存放在栈中。<br><strong>NSStackBlock</strong>类型的block调用copy成为<strong>NSMallocBlock</strong>类型并被复制存放在堆中。</p>
 <p><strong>NSGlobalBlock</strong>类型的我们很少使用到，因为如果不需要访问外界的变量，直接通过函数实现就可以了，不需要使用block。<br>但是<strong>NSStackBlock</strong>访问了aotu变量，并且是存放在栈中的，上面提到过，栈中的代码在作用域结束之后内存就会被销毁，那么我们很有可能block内存销毁之后才去调用他，那样就会发生问题.<br>通过下面代码可以证实这个问题。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (^block)(<span class="keyword">void</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// __NSStackBlock__</span></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    block = ^&#123;</span><br><span class="line">        NSLog(@<span class="string">"block---------%d"</span>, a);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        </span><br><span class="line">      test();</span><br><span class="line">      block();</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));</span><br><span class="line">   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//log:</span></span><br><span class="line"><span class="comment">// 2020-06-08 18:13:35.889505+0800 myRuntimeStudy[28727:6578019] block----------412841048</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在MRC环境下</span></span><br><span class="line"><span class="keyword">void</span> (^block)(<span class="keyword">void</span>);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// __NSStackBlock__</span></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    block = ^&#123;</span><br><span class="line">        NSLog(@<span class="string">"block---------%d"</span>, a);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        </span><br><span class="line">      test();</span><br><span class="line">      block();</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));</span><br><span class="line">   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//log:</span></span><br><span class="line"><span class="comment">// 2020-06-08 18:13:35.889505+0800 myRuntimeStudy[28727:6578019] block----------412841048</span></span><br></pre></td></tr></table></figure>
 <p>a的值变为了不可控的一个数字。为什么会发生这种情况呢？因为上述代码中创建的block是<strong>NSStackBlock</strong>类型的，因此block是存储在栈中的，那么当test函数执行完毕之后，栈内存中block所占用的内存已经被系统回收，因此就有可能出现乱得数据。</p>
 <p>查看其c++代码可以更清楚的理解。</p>
 <img src="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/MRC%E4%B8%8Bblock%E5%BC%95%E7%94%A8%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E9%87%8A%E6%94%BE%E5%BC%95%E8%B5%B7%E7%9A%84%E6%95%B0%E6%8D%AE%E9%94%99%E4%B9%B1.png" class="" title="MRC下block引用成员变量释放引起的数据错乱.png">
@@ -343,7 +345,7 @@
 
 
 <p>
-    <a  class="dashang" onclick="dashangToggle()">赏</a>
+    <a  class="dashang" onclick="dashangToggle()">💰</a>
 </p>
 
 
@@ -375,7 +377,7 @@
 <div class="shang_box">
     <a class="shang_close"  onclick="dashangToggle()">×</a>
     <div class="shang_tit">
-        <p>喜欢就点赞,疼爱就打赏</p>
+        <p>Help us with donation</p>
     </div>
     <div class="shang_payimg">
         <div class="pay_img">
@@ -384,7 +386,7 @@
         </div>
     </div>
     <div class="shang_payselect">
-        <span><label><input type="radio" name="pay" checked value="alipay">支付宝</label></span><span><label><input type="radio" name="pay" value="weixin">微信</label></span>
+        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
     </div>
 </div>
 
