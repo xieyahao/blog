@@ -67,9 +67,11 @@
 
 
 
+<a class="more-menus">更多菜单</a>
+
 
 <ul>
-    <li><div class="all active" data-rel="All">All<small>(3)</small></div></li>
+    <li><div class="all active" data-rel="全部文章">全部文章<small>(3)</small></div></li>
     
 </ul>
 <div class="left-bottom">
@@ -78,8 +80,10 @@
     
     
     
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
     </div>
-    <div><a class="about  hasFriend  site_url"  href="/about">About</a><a style="width: 50%"  class="friends">Friends</a></div>
+    <div></div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="3">
 
@@ -92,7 +96,7 @@
     <div class="nav-right">
         <div class="friends-area">
     <div class="friends-title">
-        Links
+        友情链接
         <i class="iconfont icon-left"></i>
     </div>
     <div class="friends-content">
@@ -105,7 +109,7 @@
     <div class="right-top">
         <div id="default-panel">
             <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
-            <div class="right-title">All</div>
+            <div class="right-title">全部文章</div>
             <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
         </div>
         <div id="search-panel">
@@ -132,7 +136,7 @@
     
     <nav id="title-list-nav">
         
-        <a  class="All "
+        <a  class="全部文章 "
            href="/blog/hello-world/"
            data-tag=""
            data-author="" >
@@ -140,7 +144,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="All "
+        <a  class="全部文章 "
            href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
            data-tag=""
            data-author="" >
@@ -148,7 +152,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="All "
+        <a  class="全部文章 "
            href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
            data-tag=""
            data-author="" >
@@ -185,14 +189,14 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2020-06-09 10:07:17'>2020-05-29 18:29</time>
+            发布时间 : <time class="date" title='最后更新: 2020-06-09 10:07:17'>2020-05-29 18:29</time>
         
     </div>
     <div class="article-meta">
         
         
         <span id="busuanzi_container_page_pv">
-            Views 👀 :<span id="busuanzi_value_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
                 <span class="count-comment">
                     <span class="spinner">
                       <div class="cube1"></div>
@@ -344,10 +348,6 @@
 </article>
 
 
-<p>
-    <a  class="dashang" onclick="dashangToggle()">💰</a>
-</p>
-
 
 
 
@@ -373,24 +373,6 @@
     </div>
 </div>
 
-<div class="hide_box" onclick="dashangToggle()"></div>
-<div class="shang_box">
-    <a class="shang_close"  onclick="dashangToggle()">×</a>
-    <div class="shang_tit">
-        <p>Help us with donation</p>
-    </div>
-    <div class="shang_payimg">
-        <div class="pay_img">
-            <img src="/blog/img/alipay.jpg" class="alipay" title="扫码支持">
-            <img src="/blog/img/weixin.jpg" class="weixin" title="扫码支持">
-        </div>
-    </div>
-    <div class="shang_payselect">
-        <span><label><input type="radio" name="pay" checked value="alipay">alipay</label></span><span><label><input type="radio" name="pay" value="weixin">weixin</label></span>
-    </div>
-</div>
-
-
 </body>
 <script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
 
@@ -404,14 +386,6 @@
         
 
         /*渲染打赏样式*/
-        
-        $("input[name=pay]").on("click", function () {
-            if($("input[name=pay]:checked").val()=="weixin"){
-                $(".shang_box .shang_payimg .pay_img").addClass("weixin_img");
-            } else {
-                $(".shang_box .shang_payimg .pay_img").removeClass("weixin_img");
-            }
-        })
         
 
         /*高亮代码块行号*/
@@ -430,11 +404,6 @@
     }
 
     /*打赏页面隐藏与展示*/
-    
-    function dashangToggle() {
-        $(".shang_box").fadeToggle();
-        $(".hide_box").fadeToggle();
-    }
     
 
 </script>
@@ -526,6 +495,18 @@
 
 
 
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
 
 
 </html>
