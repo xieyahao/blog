@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>学习笔记 | yahao‘s note</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="学习笔记 | yahao‘s note">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS内存管理的理解&#x2F;iOS内存管理">
+<meta property="og:url" content="https://xieyahao.github.io/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="yahao‘s note">
+<meta property="og:description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2021-03-29T04:07:53.143Z">
+<meta property="article:modified_time" content="2021-03-30T03:06:27.256Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/blog/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/blog/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/blog/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/blog/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="/blog">
+  <input id="theme_shortcut" value="true" />
+</div>
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/blog/" class="avatar_target">
+    <img class="avatar" src="/blog/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span></span>
+</div>
+
+<div class="icon">
+    
+</div>
+
+
+
+<a class="more-menus">更多菜单</a>
+
+
+<ul>
+    <li><div class="all active" data-rel="All">All<small>(10)</small></div></li>
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+    </div>
+    <div></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="10">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="All "
+           href="/blog/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="学习笔记">学习笔记</span>
+            <span class="post-date" title="2021-04-26 10:21:38">2021/04/26</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/viewController_life_time/ios_life_time%20/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="viewController_life_time/ios_life_time ">viewController_life_time/ios_life_time </span>
+            <span class="post-date" title="2021-03-25 15:32:23">2021/03/25</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E7%90%86%E8%A7%A3/block%E7%9A%84%E7%90%86%E8%A7%A3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的理解/block的理解">block的理解/block的理解</span>
+            <span class="post-date" title="2021-03-23 14:48:32">2021/03/23</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存泄漏">iOS内存泄漏</span>
+            <span class="post-date" title="2021-03-19 13:54:34">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="深拷贝与浅拷贝">深拷贝与浅拷贝</span>
+            <span class="post-date" title="2021-03-19 10:28:36">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的本质">block的本质</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="runtime学习一">runtime学习一</span>
+            <span class="post-date" title="2020-05-28 15:43:26">2020/05/28</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">学习笔记</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2021-04-26 10:25:19'>2021-04-26 10:21</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、<a href="https://blog.csdn.net/leiyutinghua/article/details/53785935绘图方式" target="_blank" rel="noopener">https://blog.csdn.net/leiyutinghua/article/details/53785935绘图方式</a></p>
+<p>一、性能优化</p>
+<p>1、tableview 的优化<br>（1） 使用cell的重用标识；<br>（2）减少cell中控件的数量， 少用addview 给cell 动态加载视图，最好在创建cell时，确定好布局；<br>（3）善用局部刷新 reloadrow sections；<br>（4）缓存行高，固定高度时可用estimatedHeightForRow给定高度，动态行高，可用一个行高的缓存字典减少高度计算。两者不能同时使用；</p>
+<p>（5）不要做多余的绘制DrawRect;</p>
+<p>（6）预渲染图像; 图片解压缩为位图非常耗CPU，位图实际上是一个装着许多像素点的数组，jpg/png是一种压缩的位图图形格式；当未解压缩的图片渲染到屏幕时，系统会在主线程对图片进行解压，如果图片已经解压缩则不需要，因此业内解决方案就是，在子线程提前对图片进行强制解压缩；<br>强制解压缩的原理就是，对图片进行重新绘制，得到一张新的解压缩后的位图；用到的核心函数是：CGBitmapContextCreate(),sdwebimage 就是这么做的。</p>
+<p>这么做也会引发一个bug，当加载高清大图时，会带来内存的暴增，对此的解决方案是：<br>1、在下载高清大图的地方，禁止解压缩图片，sdwebimage有对应的方法，<br>static BOOL SDImageCacheOldShouldDecompressImages = YES;<br>static BOOL SDImagedownloderOldShouldDecompressImages = YES;</p>
+<p>2、善于设置shouldCacheImagesInMemory 是否缓存到内存<br>maxMemoryCost  内存缓存最高限制</p>
+<p>，图片渲染到屏幕的过程:<br>a. CPU 读取文件-&gt;计算Frame-&gt;图片解码-&gt;解码后纹理图片位图数据通过数据总线交给GPU<br>b. GPU获取图片Frame-&gt;顶点变换计算-&gt;光栅化-&gt;根据纹理坐标获取每个像素点的颜色值(如果出现透明值需要将每个像素点的颜色*透明度值)-&gt;渲染到帧缓存区-&gt;渲染到屏幕</p>
+<p>作者：Sheisone<br>链接：<a href="https://www.jianshu.com/p/3b57f60ce4a9" target="_blank" rel="noopener">https://www.jianshu.com/p/3b57f60ce4a9</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>2、绘制性能优化原则？<a href="https://blog.csdn.net/jijiji000111/article/details/50480405" target="_blank" rel="noopener">https://blog.csdn.net/jijiji000111/article/details/50480405</a><br> （1）drawRect绘制造成的内存增长原因？<br>UIView 是通过CALayer显示在屏幕上，CALayer通过Contents寄宿图，来接受CGImageRef类型的图片显示出来、或者绘制Contents。当UIView检测到DrawRec t被调用后，会自动为视图分配一个寄宿图，寄宿图的像素尺寸等于是视图大小 乘以 contentsScale的值。这时所占内存为图层宽<em>图层高</em>4 字节；他就是原因；</p>
+<p>（2）原则：<br>a . 尽量不去绘制图形；<br>b . 不得不用到绘图，尽量缩小视图面积，并尽量降低重绘频率；<br>c . 利用专用图层代替绘图需求，如画图板功能，可用CAShapeLayer来替代（CAShapeLayer是一个通过矢量图形而不是bitmap来绘制的图层子类）。<br>d . 异步绘制，推测内容，提前在其他线程绘制图片，在主线程中直接设置图片；</p>
+<p>3、<a href="https://www.jianshu.com/p/6db3289fb05d" target="_blank" rel="noopener">https://www.jianshu.com/p/6db3289fb05d</a> coreText减少cell中view数量的</p>
+<p>4、布局方式<br>（1）frame<br>（2）autoResizing 用于两个视图之间的布局，xib storyboard 用的比较方便；纯代码可作为frame的补充；<br>（3）autoLayout<br>       a .是用Cassowary 算法实现的，将布局问题抽象成线性等式和不等式进行求解。最终得到frame完成布局。<br>       B .还包含了布局在运行时的生命周期等一套布局引擎系统，用来创建、更新、销毁布局。<br>       C. 性能上 在处理及其复杂UI界面时，会造成性能上的巨大损失，iOS12以后，苹果官方完善地利用Cassowary算法的更新策略，使得autolayout 拥有与手写布局相同的性能；<br>D. autolayout 是一种布局方案</p>
+<p>（4）UIStackView 是一个容器，不会绘制到页面上，提供一个高效的用于平铺一行或一列的视图组合；</p>
+<p>5、离屏渲染<br>当图层的属性的混合体 在未预合成前，不能直接在屏幕中绘制时，将引发离屏渲染；<br>以下图层属性将引发离屏渲染：<br>圆角（和maskTobounds一起使用）解决：CAShapeLayer(根据路径绘制的图层)，作为视图的宿主视图，绘制;<br>图层蒙版<br>阴影</p>
+<p>二、保持界面的流畅<br>参考：<a href="https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893" target="_blank" rel="noopener">https://blog.ibireme.com/2015/11/12/smooth_user_interfaces_for_ios/#more-41893</a><br>了解了界面显示的过程后，我们知道，保持流畅在于对，CPU与GPU进行优化；<br>1、CPU资源消耗原因与解决方案<br>A、对象创建<br>优化: 使用轻量级的对象提到重量级的对象；尽量推迟对象创建时间，并把对象的创建分散到多个任务中去；多复用对象；</p>
+<p>B、对象调整<br>当视图层级调整时，UIView、CALayer之间会出现很多方法调用与通知，因此性能时，应尽量避免调整视图层次、添加和移除视图；</p>
+<p>C、对象销毁<br>/////. 当容器持有大量对象时，销毁时的资源消耗非常明显，如果对象可以放到后台线程去释放，就挪到后台线程，有个小 Tip：把对象捕获到 block 中，然后扔到后台队列去随便发送个消息以避免编译器警告，就可以让对象在后台线程销毁了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSArray</span> *tmp = <span class="keyword">self</span>.array;</span><br><span class="line"><span class="keyword">self</span>.array = <span class="literal">nil</span>;</span><br><span class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line">    [tmp <span class="keyword">class</span>];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+<p>D、布局计算<br>视图布局的计算是 App 中最为常见的消耗 CPU 资源的地方。如果能在后台线程提前计算好视图布局、并且对视图布局进行缓存，那么这个地方基本就不会产生性能问题了。<br>不论通过何种技术对视图进行布局，其最终都会落到对 UIView.frame/bounds/center 等属性的调整上。上面也说过，对这些属性的调整非常消耗资源，所以尽量提前计算好布局，在需要时一次性调整好对应属性，而不要多次、频繁的计算和调整这些属性</p>
+<p>E、Autolayout</p>
+<p>F、文本计算<br>如果一个界面中包含大量文本（比如微博微信朋友圈等），文本的宽高计算会占用很大一部分资源，并且不可避免。如果你对文本显示没有特殊要求，可以参考下 UILabel 内部的实现方式：用 [NSAttributedString boundingRectWithSize:options:context:] 来计算文本宽高，用 -[NSAttributedString drawWithRect:options:context:] 来绘制文本。尽管这两个方法性能不错，但仍旧需要放到后台线程进行以避免阻塞主线程。<br>如果你用 CoreText 绘制文本，那就可以先生成 CoreText 排版对象，然后自己计算了，并且 CoreText 对象还能保留以供稍后绘制使用。</p>
+<p>G、文本渲染</p>
+<p>屏幕上能看到的所有文本内容控件，包括 UIWebView，在底层都是通过 CoreText 排版、绘制为 Bitmap 显示的。常见的文本控件 （UILabel、UITextView 等），其排版和绘制都是在主线程进行的，当显示大量文本时，CPU 的压力会非常大。对此解决方案只有一个，那就是自定义文本控件，用 TextKit 或最底层的 CoreText 对文本异步绘制。尽管这实现起来非常麻烦，但其带来的优势也非常大，CoreText 对象创建好后，能直接获取文本的宽高等信息，避免了多次计算（调整 UILabel 大小时算一遍、UILabel 绘制时内部再算一遍）；CoreText 对象占用内存较少，可以缓存下来以备稍后多次渲染。</p>
+<p>H、图片的解码<br>当你用 UIImage 或 CGImageSource 的那几个方法创建图片时，图片数据并不会立刻解码。图片设置到 UIImageView 或者 CALayer.contents 中去，并且 CALayer 被提交到 GPU 前，CGImage 中的数据才会得到解码。这一步是发生在主线程的，并且不可避免。如果想要绕开这个机制，常见的做法是在后台线程先把图片绘制到 CGBitmapContext 中，然后从 Bitmap 直接创建图片。目前常见的网络图片库都自带这个功能；</p>
+<p>I、图像的绘制<br>图像的绘制通常是指用那些以 CG 开头的方法把图像绘制到画布中，然后从画布创建图片并显示这样一个过程。这个最常见的地方就是 [UIView drawRect:] 里面了。由于 CoreGraphic 方法通常都是线程安全的，所以图像的绘制可以很容易的放到后台线程进行。一个简单异步绘制的过程大致如下（实际情况会比这个复杂得多，但原理基本一致）</p>
+<ul>
+<li>(void)display {<br>  dispatch_async(backgroundQueue, ^{<pre><code>CGContextRef ctx = CGBitmapContextCreate(...);
+// draw in context...
+CGImageRef img = CGBitmapContextCreateImage(ctx);
+CFRelease(ctx);
+dispatch_async(mainQueue, ^{
+    layer.contents = img;
+});</code></pre>  });<br>}</li>
+</ul>
+<p>2、GPU资源消耗的原因和解决方案</p>
+<p>A、纹理的渲染<br>所有的 Bitmap，包括图片、文本、栅格化的内容，最终都要由内存提交到显存，绑定为 GPU Texture。不论是提交到显存的过程，还是 GPU 调整和渲染 Texture 的过程，都要消耗不少 GPU 资源。当在较短时间显示大量图片时（比如 TableView 存在非常多的图片并且快速滑动时），CPU 占用率很低，GPU 占用非常高，界面仍然会掉帧。避免这种情况的方法只能是尽量减少在短时间内大量图片的显示，尽可能将多张图片合成为一张进行显示。<br>当图片过大，超过 GPU 的最大纹理尺寸时，图片需要先由 CPU 进行预处理，这对 CPU 和 GPU 都会带来额外的资源消耗。目前来说，iPhone 4S 以上机型，纹理尺寸上限都是 4096×4096，更详细的资料可以看这里：iosres.com。所以，尽量不要让图片和视图的大小超过这个值。</p>
+<p>B、视图的混合Composing<br>当多个视图（或者说 CALayer）重叠在一起显示时，GPU 会首先把他们混合到一起。如果视图结构过于复杂，混合的过程也会消耗很多 GPU 资源。为了减轻这种情况的 GPU 消耗，应用应当尽量减少视图数量和层次，并在不透明的视图里标明 opaque 属性以避免无用的 Alpha 通道合成。当然，这也可以用上面的方法，把多个视图预先渲染为一张图片来显示。</p>
+<p>C、图形的生成</p>
+<p>CALayer 的 border、圆角、阴影、遮罩（mask），CAShapeLayer 的矢量图形显示，通常会触发离屏渲染（offscreen rendering），而离屏渲染通常发生在 GPU 中。当一个列表视图中出现大量圆角的 CALayer，并且快速滑动时，可以观察到 GPU 资源已经占满，而 CPU 资源消耗很少。这时界面仍然能正常滑动，但平均帧数会降到很低。为了避免这种情况，可以尝试开启 CALayer.shouldRasterize 属性，但这会把原本离屏渲染的操作转嫁到 CPU 上去。对于只需要圆角的某些场合，也可以用一张已经绘制好的圆角图片覆盖到原本视图上面来模拟相同的视觉效果。最彻底的解决办法，就是把需要显示的图形在后台线程绘制为图片，避免使用圆角、阴影、遮罩等属性。</p>
+<p>protocol 是一种特殊的程序设计结构，用于声明专门被别的类实现的方法；</p>
+<p>三、coreText  是基于iOS3.2+和OSX 10.5+ 的一种能够对文本格式和文本布局进行精细控制的文本引擎；通过core Text 我们可以把文本内容直接渲染到图形上下文（Graphics context）；</p>
+<p>YYText<br>TextKit 是苹果对coreText的封装。</p>
+<p>四、小知识点</p>
+<p>1、免费桥连接<br>Toll-free bridging 是一种允许某些Foundation objc类与其对应的core foundation类之间互换使用的机制；比如NSString 与CFString是桥接的；</p>
+<p>五、名词解释</p>
+<p>（1）降低（基于GPU）图层绘制的有：<br>1、光栅化<br> 启用shouldRasterize属性，图层及其子图层都会被整合成一个整体的图片，绘制到屏幕之外的图像，然后缓存这个图像并绘制到实际图层的contents 和子图层；</p>
+<p>优化性能优势在，用于拥有很多子图层和复杂效果时，比重绘所有事务划算。<br>劣势是，光栅化原始图像需要时间，同时会消耗额外的内存；</p>
+<p> 2、离屏渲染<br>无法直接在当前屏幕绘制时，将唤起屏幕外渲染。图层的以下属性将会触发屏幕外绘制：<br>    •    圆角（当和maskToBounds一起使用时）<br>    •    图层蒙板<br>    •    阴影</p>
+<p>屏幕外渲染和我们启用光栅化时相似，它并没有像光栅化图层那么消耗大，子图层并没有被影响到，而且结果也没有被缓存，所以不会有长期的内存占用。但是，如果太多图层在屏幕外渲染依然会影响到性能。</p>
+<p>3、太多的几何结构，太多的图层。<br>4、过大的图片，如果视图绘制超出GPU支持的2048x2048或者4096x4096尺寸的纹理，就必须要用CPU在图层每次显示之前对图片预处理，同样也会降低性能。</p>
+<p>（2）CPU的相关操作<br>1、布局计算- layout 以及视图较复杂时<br>2、视图懒加载 - iOS只会当视图控制器的视图显示到屏幕上时才会加载它。这对内存使用和程序启动时间很有好处；</p>
+<p>3、core graphics绘制，开销大在于 a. 创建寄宿图的内存消耗。b.绘制完成还需把图片数据传到渲染服务器。</p>
+<p>4、解压图片 通常在第一次对图层赋值时，（间接/直接使用UIImageView ），或者绘制到core graphics.</p>
+<p>六、block<br>Block  包含调用上下文的一个匿名函数；<br>（1）可以访问外部变量，但只限于只读操作；<br>（2）如果我们希望在block中修改外部局部变量时，可以给这些变量加上__block关键字修饰。否则，block在捕获变量的时候只会保存变量被捕获时的状态（对象变量除外），之后即便变量再次改变，block中的值也不会发生改变。</p>
+<p>修改静态变量和全局变量，block内的值是会改变的 ，为什么？</p>
+<p>使用__block,做了什么事情？<br>猜测，在copy时，</p>
+<p>（3）循环引用， block 在iOS 中被视为对象，可作为成员变量（用copy）。因此，其生命周期会等到持有者生命周期的结束才会结束；另一方面，由于block捕获变量的机制，使得持有block的对象也可能被block持有，从而形成循环引用，导致两者都不能被释放；解决方法 需要持有self时，用__weak 关键字。</p>
+<p>（4）block分三类，分别为<br>       全局block: _NSConcreteGlobalBlock,存储在全局内存中，相当于单例。<br>       栈block: _NSConcreteStackBlock,存储在栈内存中；<br>       堆block：_NSConcreteMallocBlock,存储在堆内存；<br>（5）如何判定block的存储位置？<br>        A、block不访问外部变量，此时block在全局内存，_NSConcreteGlobalBlock;<br>        B、block访问外部变量，MRC下默认存储在栈中，ARC下自动拷贝到堆中。<br>        C、如何在ARC下获取栈block呢，__weak 不进行强引用，输出即为NSStackBlock;</p>
+<p>七、多线程 GCD 加锁<br><a href="https://www.jianshu.com/p/80848fdd1e2a" target="_blank" rel="noopener">https://www.jianshu.com/p/80848fdd1e2a</a></p>
+<p>加锁：<br><a href="https://www.jianshu.com/p/97ed78a6f9b8" target="_blank" rel="noopener">https://www.jianshu.com/p/97ed78a6f9b8</a></p>
+<p>八、 KVO<br>KeyValueObserving键值监听，用于监听某个对象属性值的改变；<br>1、用法：<br>[addObserver:forKeyPath:options:context]注册KVO，<br>[observeValueForKeyPath:ofObject:change:context] 实现kvo的监听方法<br>[removeObserver:forKeyPath:]，移除监听；</p>
+<p>九、内存泄漏场景与解决方法</p>
+<p>1、core foundation 方法，手动释放release</p>
+<p>2、循环引用<br>（1）timer 的销毁释放</p>
+<p>（2）</p>
+<p>十、深拷贝 与 浅拷贝<br>1、两者存在区别的前提<br>“=” 做赋值操作时，基本数据类型，实际是拷贝值；对于对象，其实赋值的只是这个对象的引用，将原对象的引用传递过去，新建指针，他们指向的还是同一个对象；</p>
+<p>2、如何判定<br>对与只是指针指向，而没有真实创建一个新的对象，认为是浅拷贝。<br>创建新对象，并复制其内的成员变量，则为深拷贝；</p>
+<p>3、如何实现 深拷贝，浅拷贝</p>
+<p>对不同的对象<br>NSString *str2 = [str1 copy];<br>NSMutableString *str3 = [str1 mutableCopy];</p>
+<p>十、runloop 状态 运行流程</p>
+<p>十一、事件响应链</p>
+<p>十二、应用启动顺序</p>
+<p>十三、NSOperation 添加线程依赖 怎么实现的</p>
+<p><a href="https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md#26-runtime如何实现weak变量的自动置nil" target="_blank" rel="noopener">https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md#26-runtime如何实现weak变量的自动置nil</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 Yelog
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/blog/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 522px;
+    }
+    .nav.fullscreen {
+        margin-left: -522px;
+    }
+    .nav-left {
+        width: 100px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 472px;
+        }
+        .nav.fullscreen {
+            margin-left: -472px;
+        }
+        .nav-left {
+            width: 80px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 472px;
+            margin-left: -472px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
+
+
+</html>

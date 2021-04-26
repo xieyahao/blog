@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>yahao‘s note</title>
+  <title>iOS内存泄漏 | yahao‘s note</title>
   <meta name="keywords" content="">
-  <meta name="description" content="yahao‘s note">
+  <meta name="description" content="iOS内存泄漏 | yahao‘s note">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
 <meta property="og:type" content="article">
@@ -52,7 +52,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/blog/" class="avatar_target">
     <img class="avatar" src="/blog/img/avatar.jpg" />
@@ -231,12 +231,43 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-iOS内存泄漏" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于我"><span class="toc-text">关于我</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#博客平台"><span class="toc-text">博客平台</span></a></li></ol>
+        <h1 class="article-title">iOS内存泄漏</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2021-03-19 13:54:34'>2021-03-19 13:54</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、内存泄漏的定义"><span class="toc-text">1、内存泄漏的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、iOS-常见的内存泄漏有哪些"><span class="toc-text">2、iOS 常见的内存泄漏有哪些</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）循环引用"><span class="toc-text">（1）循环引用</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -249,20 +280,35 @@
     }
 </style>
 </div>
-            <h2 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h2><p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 生成，部署在 <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a>主题 <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank" rel="noopener">3-hexo</a> 已经在github上开源</p>
-<p><code>3-hexo</code> 主题使用交流可以加 Q群: <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=e8cf083cc097141eaf323396f1766809b8e90ff00c67bb441898f672892f6904"><img data-ignore border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="3-hexo使用交流" title="3-hexo使用交流"></a></p>
-<p>主要功能：</p>
-<ul>
-<li>搜索支持文章标题、标签(#标签)、作者(@作者)</li>
-<li>pad/手机等移动端适配</li>
-<li>页面全局快捷键 <a href='http://yelog.org/2017/03/24/3-hexo-shortcuts/' target="_blank" rel="noopener">3-hexo快捷键说明</a></li>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1、内存泄漏的定义"><a href="#1、内存泄漏的定义" class="headerlink" title="1、内存泄漏的定义"></a>1、内存泄漏的定义</h2><p>程序中已动态分配的堆内存，由于某些原因未释放或无法释放。造成内存浪费导致程序运行速度减慢甚至崩溃；</p>
+<h2 id="2、iOS-常见的内存泄漏有哪些"><a href="#2、iOS-常见的内存泄漏有哪些" class="headerlink" title="2、iOS 常见的内存泄漏有哪些"></a>2、iOS 常见的内存泄漏有哪些</h2><h3 id="（1）循环引用"><a href="#（1）循环引用" class="headerlink" title="（1）循环引用"></a>（1）循环引用</h3><ul>
+<li><p>造成原因：</p>
+</li>
+<li><p>如何应对</p>
+</li>
+<li><p>验证</p>
+</li>
 </ul>
 
-        </article>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -271,11 +317,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 </body>

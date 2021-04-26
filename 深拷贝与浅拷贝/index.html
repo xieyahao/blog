@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>深拷贝与浅拷贝 | yahao‘s note</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="深拷贝与浅拷贝 | yahao‘s note">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS内存管理的理解&#x2F;iOS内存管理">
+<meta property="og:url" content="https://xieyahao.github.io/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="yahao‘s note">
+<meta property="og:description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2021-03-29T04:07:53.143Z">
+<meta property="article:modified_time" content="2021-03-30T03:06:27.256Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/blog/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/blog/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/blog/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/blog/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="/blog">
+  <input id="theme_shortcut" value="true" />
+</div>
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/blog/" class="avatar_target">
+    <img class="avatar" src="/blog/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span></span>
+</div>
+
+<div class="icon">
+    
+</div>
+
+
+
+<a class="more-menus">更多菜单</a>
+
+
+<ul>
+    <li><div class="all active" data-rel="All">All<small>(10)</small></div></li>
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+    </div>
+    <div></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="10">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="All "
+           href="/blog/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="学习笔记">学习笔记</span>
+            <span class="post-date" title="2021-04-26 10:21:38">2021/04/26</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/viewController_life_time/ios_life_time%20/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="viewController_life_time/ios_life_time ">viewController_life_time/ios_life_time </span>
+            <span class="post-date" title="2021-03-25 15:32:23">2021/03/25</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E7%90%86%E8%A7%A3/block%E7%9A%84%E7%90%86%E8%A7%A3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的理解/block的理解">block的理解/block的理解</span>
+            <span class="post-date" title="2021-03-23 14:48:32">2021/03/23</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存泄漏">iOS内存泄漏</span>
+            <span class="post-date" title="2021-03-19 13:54:34">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="深拷贝与浅拷贝">深拷贝与浅拷贝</span>
+            <span class="post-date" title="2021-03-19 10:28:36">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的本质">block的本质</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="runtime学习一">runtime学习一</span>
+            <span class="post-date" title="2020-05-28 15:43:26">2020/05/28</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-深拷贝与浅拷贝" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">深拷贝与浅拷贝</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2021-03-31 17:40:20'>2021-03-19 10:28</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#十、深拷贝-与-浅拷贝"><span class="toc-text">十、深拷贝 与 浅拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、两者存在区别的前提"><span class="toc-text">1、两者存在区别的前提</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、如何判定"><span class="toc-text">2、如何判定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、iOS里提供的copy-mutableCopy是实现了-深拷贝，浅拷贝吗"><span class="toc-text">3、iOS里提供的copy&#x2F;mutableCopy是实现了 深拷贝，浅拷贝吗</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）看看copy-mutableCopy的使用对String-mutableString-对象、Array-mutableArray对象、自定义对象的不同影响："><span class="toc-text">（1）看看copy mutableCopy的使用对String&#x2F;mutableString 对象、Array&#x2F;mutableArray对象、自定义对象的不同影响：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）对于容器类的NSArray、NSMutableArray对象的影响"><span class="toc-text">（2）对于容器类的NSArray、NSMutableArray对象的影响</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、我们可以对任意对象-使用copy-mutableCopy方法"><span class="toc-text">3、我们可以对任意对象 使用copy mutableCopy方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、property-中的-copy-关键字是怎么操作呢"><span class="toc-text">4、property 中的 copy 关键字是怎么操作呢</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、使用copy的必要性"><span class="toc-text">5、使用copy的必要性</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="十、深拷贝-与-浅拷贝"><a href="#十、深拷贝-与-浅拷贝" class="headerlink" title="十、深拷贝 与 浅拷贝"></a>十、深拷贝 与 浅拷贝</h1><h2 id="1、两者存在区别的前提"><a href="#1、两者存在区别的前提" class="headerlink" title="1、两者存在区别的前提"></a>1、两者存在区别的前提</h2><p>“=” 做赋值操作时，基本数据类型，实际是拷贝值；对于对象，其实赋值的只是这个对象的引用，将原对象的引用传递过去，新建指针，他们指向的还是同一个对象；正是基于这个区别，才有了深拷贝与浅拷贝；</p>
+<h2 id="2、如何判定"><a href="#2、如何判定" class="headerlink" title="2、如何判定"></a>2、如何判定</h2><p>对于只是指针指向，而没有真实创建一个新的对象，认为是浅拷贝。<br>创建新对象，并复制其内的成员变量，则为深拷贝；<br>iOS 开发里提供了copy和mutableCopy来帮助实现浅拷贝与深拷贝；</p>
+<h2 id="3、iOS里提供的copy-mutableCopy是实现了-深拷贝，浅拷贝吗"><a href="#3、iOS里提供的copy-mutableCopy是实现了-深拷贝，浅拷贝吗" class="headerlink" title="3、iOS里提供的copy/mutableCopy是实现了 深拷贝，浅拷贝吗"></a>3、iOS里提供的copy/mutableCopy是实现了 深拷贝，浅拷贝吗</h2><p>对不同的对象 ：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *str1 = <span class="string">@"我是字符串"</span>;</span><br><span class="line"><span class="built_in">NSString</span> *str2 = [str1 <span class="keyword">copy</span>];</span><br><span class="line"><span class="built_in">NSMutableString</span> *str3 = [str1 mutableCopy];</span><br></pre></td></tr></table></figure>
+
+<h3 id="（1）看看copy-mutableCopy的使用对String-mutableString-对象、Array-mutableArray对象、自定义对象的不同影响："><a href="#（1）看看copy-mutableCopy的使用对String-mutableString-对象、Array-mutableArray对象、自定义对象的不同影响：" class="headerlink" title="（1）看看copy mutableCopy的使用对String/mutableString 对象、Array/mutableArray对象、自定义对象的不同影响："></a>（1）看看copy mutableCopy的使用对String/mutableString 对象、Array/mutableArray对象、自定义对象的不同影响：</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="built_in">NSString</span> *str = <span class="string">@"string"</span>;</span><br><span class="line"><span class="built_in">NSMutableString</span> *muStr = [<span class="built_in">NSMutableString</span> stringWithString:str];</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSString</span> *str2 = str;</span><br><span class="line"><span class="built_in">NSString</span> *str3 = str.copy;</span><br><span class="line"><span class="built_in">NSString</span> *str4 = str.mutableCopy;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"str = %p,str2 = %p,str3 = %p,str4 = %p"</span>,str,str2,str3,str4);</span><br><span class="line"><span class="comment">// str = 0x10024c568,str2 = 0x10024c568,str3 = 0x10024c568,str4 = 0x28395ec70</span></span><br><span class="line"><span class="comment">//在调试模式下，p str3 会得到 (__NSCFConstantString *) $2 = 0x0000000102a60568 @"string"</span></span><br><span class="line"><span class="comment">// p str4 (__NSCFString *) $3 = 0x0000000282697690 @"string"</span></span><br><span class="line"><span class="comment">//copy 得到的 immutable  mutableCopy 得到的是mutable</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">NSString</span> *mutableStr2 = muStr;</span><br><span class="line"><span class="built_in">NSArray</span> *mutableStr3 = muStr.copy;</span><br><span class="line"><span class="built_in">NSArray</span> *mutableStr4 = muStr.mutableCopy;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"muStr = %p,mutableStr2 = %p,mutableStr3 = %p,mutableStr4 = %p"</span>,muStr,mutableStr2,mutableStr3,mutableStr4);</span><br><span class="line"><span class="comment">//muStr = 0x28395e850,mutableStr2 = 0x28395e850,mutableStr3 = 0xac11ce1dbc44537c,mutableStr4 = 0x28395ec10</span></span><br></pre></td></tr></table></figure>
+<p>从输出的地址，我们可以得出结论：</p>
+<ul>
+<li><p>NSString不可变类型的对象，copy后，指针指向地址不变，为浅拷贝。mutableCopy为深拷贝；</p>
+</li>
+<li><p>NSMutableString 的可变类型对象，copy/mutableCopy 均为深拷贝;</p>
+<h3 id="（2）对于容器类的NSArray、NSMutableArray对象的影响"><a href="#（2）对于容器类的NSArray、NSMutableArray对象的影响" class="headerlink" title="（2）对于容器类的NSArray、NSMutableArray对象的影响"></a>（2）对于容器类的NSArray、NSMutableArray对象的影响</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSArray</span> *arr = @[@<span class="number">1</span>,@<span class="number">2</span>,@<span class="number">3</span>];</span><br><span class="line"><span class="built_in">NSMutableArray</span> *muArr = [<span class="built_in">NSMutableArray</span> arrayWithArray:arr];</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSArray</span> *arr2 = arr;</span><br><span class="line"><span class="built_in">NSArray</span> *arr3 = arr.copy;</span><br><span class="line"><span class="built_in">NSArray</span> *arr4 = arr.mutableCopy;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"arr = %@,arr2 = %@,arr3 = %@,arr4 = %@"</span>,arr,arr2,arr3,arr4);</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"arr = %p,arr2 = %p,arr3 = %p,arr4 = %p"</span>,arr,arr2,arr3,arr4); <span class="comment">//arr = 0x2819cda40,arr2 = 0x2819cda40,arr3 = 0x2819cda40,arr4 = 0x2819cdb30</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"arr = %p,arr2 = %p,arr3 = %p,arr4 = %p"</span>,arr[<span class="number">0</span>],arr2[<span class="number">0</span>],arr3[<span class="number">0</span>],arr4[<span class="number">0</span>]); <span class="comment">//arr = 0xf3412fa23a6de50d,arr2 = 0xf3412fa23a6de50d,arr3 = 0xf3412fa23a6de50d,arr4 = 0xf3412fa23a6de50d</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">NSArray</span> *mutableArr2 = muArr;</span><br><span class="line"><span class="built_in">NSArray</span> *mutableArr3 = muArr.copy;</span><br><span class="line"><span class="built_in">NSArray</span> *mutableArr4 = muArr.mutableCopy;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"muArr = %p,mutableArr2 = %p,mutableArr3 = %p,mutableArr4 = %p"</span>,muArr,mutableArr2,mutableArr3,mutableArr4); <span class="comment">//muArr = 0x2819cdb90,mutableArr2 = 0x2819cdb90,mutableArr3 = 0x2819cd980,mutableArr4 = 0x2819cdbc0</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"muArr = %p,mutableArr2 = %p,mutableArr3 = %p,mutableArr4 = %p"</span>,muArr[<span class="number">0</span>],mutableArr2[<span class="number">0</span>],mutableArr3[<span class="number">0</span>],mutableArr4[<span class="number">0</span>]) <span class="comment">// muArr = 0xf3412fa23a6de50d,mutableArr2 = 0xf3412fa23a6de50d,mutableArr3 = 0xf3412fa23a6de50d,mutableArr4 = 0xf3412fa23a6de50d</span></span><br></pre></td></tr></table></figure>
+<p>从上可以看出，</p>
+<ul>
+<li>对于immutableObject集合类的对象 copy 是浅拷贝；mutableCopy 是单层深拷贝；</li>
+<li>对于mutableObject集合类的对象 copy 、mutableCopy 都是单层深拷贝；</li>
+</ul>
+</li>
+</ul>
+<h2 id="3、我们可以对任意对象-使用copy-mutableCopy方法"><a href="#3、我们可以对任意对象-使用copy-mutableCopy方法" class="headerlink" title="3、我们可以对任意对象 使用copy mutableCopy方法"></a>3、我们可以对任意对象 使用copy mutableCopy方法</h2><ul>
+<li><p>不能，NSString/NSMutableString、NSArray/NSMutableArray、NSDictonry/NSMutableDictionary遵守了NSCopying/NSMutableCopying协议，实现了copyWithZone/mutableCopyWithZone方法；</p>
+</li>
+<li><p>当我们向NSObject的对象,实行copy/mutableCopy时，将崩溃报unrecognized selector sent to instance；</p>
+</li>
+<li><p>遵守协议，实现协议方法就可以了；</p>
+</li>
+</ul>
+<h2 id="4、property-中的-copy-关键字是怎么操作呢"><a href="#4、property-中的-copy-关键字是怎么操作呢" class="headerlink" title="4、property 中的 copy 关键字是怎么操作呢"></a>4、property 中的 copy 关键字是怎么操作呢</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">copy</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSString</span> *someString;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)setSomeString:(<span class="built_in">NSString</span> *)someString</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//没有写copy属性时</span></span><br><span class="line">  _someString = someString;</span><br><span class="line">  <span class="comment">//写了copy属性时</span></span><br><span class="line">  _someString = [someString <span class="keyword">copy</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因此，需要我们 使用属性时，用self.property，而不是成员变量_property;</p>
+<h2 id="5、使用copy的必要性"><a href="#5、使用copy的必要性" class="headerlink" title="5、使用copy的必要性"></a>5、使用copy的必要性</h2><p>摘自：<a href="https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md#13-用property声明的nsstring或nsarraynsdictionary经常使用copy关键字为什么如果改用strong关键字可能造成什么问题" target="_blank" rel="noopener">https://github.com/ChenYilong/iOSInterviewQuestions/blob/master/01《招聘一个靠谱的iOS》面试题参考答案/《招聘一个靠谱的iOS》面试题参考答案（上）.md#13-用property声明的nsstring或nsarraynsdictionary经常使用copy关键字为什么如果改用strong关键字可能造成什么问题</a></p>
+<ul>
+<li>因为父类指针可以指向子类对象,使用 copy 的目的是为了让本对象的属性不受外界影响,使用 copy 无论给我传入是一个可变对象还是不可对象,我本身持有的就是一个不可变的副本.</li>
+<li>如果我们使用是 strong ,那么这个属性就有可能指向一个可变对象,如果这个可变对象在外部被修改了,那么会影响该属性.</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 Yelog
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/blog/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 522px;
+    }
+    .nav.fullscreen {
+        margin-left: -522px;
+    }
+    .nav-left {
+        width: 100px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 472px;
+        }
+        .nav.fullscreen {
+            margin-left: -472px;
+        }
+        .nav-left {
+            width: 80px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 472px;
+            margin-left: -472px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
+
+
+</html>

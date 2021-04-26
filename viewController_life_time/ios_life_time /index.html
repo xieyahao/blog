@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>viewController_life_time/ios_life_time  | yahao‘s note</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="viewController_life_time/ios_life_time  | yahao‘s note">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS内存管理的理解&#x2F;iOS内存管理">
+<meta property="og:url" content="https://xieyahao.github.io/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="yahao‘s note">
+<meta property="og:description" content="iOS中的内存管理object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。 1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？ 自己生成的对象自己持有； 非自己生成的对象，自己也能持有； 不再需要自己持有的对象时释放； 非自己持有的对象无法释放；  对应于OC里，alloc&#x2F;new&#x2F;copy&#x2F;mutableCopy等方法">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2021-03-29T04:07:53.143Z">
+<meta property="article:modified_time" content="2021-03-30T03:06:27.256Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/blog/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/blog/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/blog/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/blog/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="/blog">
+  <input id="theme_shortcut" value="true" />
+</div>
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/blog/" class="avatar_target">
+    <img class="avatar" src="/blog/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span></span>
+</div>
+
+<div class="icon">
+    
+</div>
+
+
+
+<a class="more-menus">更多菜单</a>
+
+
+<ul>
+    <li><div class="all active" data-rel="All">All<small>(10)</small></div></li>
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+    </div>
+    <div></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="10">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="All "
+           href="/blog/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="学习笔记">学习笔记</span>
+            <span class="post-date" title="2021-04-26 10:21:38">2021/04/26</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/viewController_life_time/ios_life_time%20/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="viewController_life_time/ios_life_time ">viewController_life_time/ios_life_time </span>
+            <span class="post-date" title="2021-03-25 15:32:23">2021/03/25</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E7%90%86%E8%A7%A3/block%E7%9A%84%E7%90%86%E8%A7%A3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的理解/block的理解">block的理解/block的理解</span>
+            <span class="post-date" title="2021-03-23 14:48:32">2021/03/23</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存泄漏">iOS内存泄漏</span>
+            <span class="post-date" title="2021-03-19 13:54:34">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="深拷贝与浅拷贝">深拷贝与浅拷贝</span>
+            <span class="post-date" title="2021-03-19 10:28:36">2021/03/19</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的本质">block的本质</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="runtime学习一">runtime学习一</span>
+            <span class="post-date" title="2020-05-28 15:43:26">2020/05/28</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-viewController_life_time/ios_life_time " class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">viewController_life_time/ios_life_time </h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2021-04-13 10:41:38'>2021-03-25 15:32</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1、viewController-的生命周期"><span class="toc-text">1、viewController 的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#在A里"><span class="toc-text">在A里</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2、UIview-的生命周期"><span class="toc-text">2、UIview 的生命周期</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3、iOS事件传递与响应"><span class="toc-text">3、iOS事件传递与响应</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1、viewController-的生命周期"><a href="#1、viewController-的生命周期" class="headerlink" title="1、viewController 的生命周期"></a>1、viewController 的生命周期</h1><p>假设存在三个UIViewController A、B、C</p>
+<img src="img/viewController_push_order.png" width=305 height=90/>
+
+<p>对于A依次调用：<br>initialize<br>init<br>viewDidLoad<br>viewWillAppear<br>viewWillLayoutSubViews<br>viewDidLayoutSubViews<br>viewDidAppear<br>A加载完成</p>
+<p>A——》B push </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    -(<span class="keyword">void</span>)push &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"--------------------"</span>);</span><br><span class="line">    [<span class="keyword">self</span>.navigationController pushViewController:[[ViewControllerB alloc]init] animated:<span class="literal">true</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"--------------------"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="在A里"><a href="#在A里" class="headerlink" title="在A里"></a>在A里</h2><p>initialize B<br>init B</p>
+<hr>
+<p>viewDidLoad B<br>viewWillAppear B<br>viewWillLayoutSubviews B<br>viewDidLayoutSubviews B<br>viewDidAppear B<br>B加载完成</p>
+<p>B——》C同上，<br>C——》B</p>
+<p>viewWillAppear B<br>viewDidAppear B<br>dealloc C</p>
+<p>当系统执行 layoutSubviews 完成后，会触发ViewController的 viewDidLayoutSubviews 方法调用。因为 viewDidLayoutSubviews 是 view 布局更新后会被唯一可靠调用的方法，所以我们应该把所有依赖于布局或者大小的代码放在 viewDidLayoutSubviews 中，而不是放在 viewDidLoad 或者 viewDidAppear 中。这是避免使用过时的布局或者位置变量的唯一方法。</p>
+<p>ViewController1从初始化到释放的整个过程。</p>
+<p>（1）+ (void)initialize：函数并不会每次创建对象都调用，只有在第一次使用某个类的时候才会调用一次，再次创建将不会调用initialize方法。<br>init方法和initCoder方法相似，只是被调用的环境不一样。如果用代码初始化，会调用init方法，从nib文件或者归档(xib、storyboard)进行初始化会调用initCoder。initCoder是NSCoding协议中的方法，NSCoding是负责编码解码，归档处理的协议。<br>（2）loadView：是开始加载view的起始方法，除非手动调用，否则在ViewController的生命周期中只调用一次。<br>（3）viewDidLoad：是我们最常用的方法，类成员对象和变量的初始化我们都会放在这个方法中。在创建类后无论视图展现还是消失，这个方法也只会在布局是调用一次。<br>（4）viewWillAppear:(BOOL)animated：方法 是在视图将要展现出来的时候调用。<br>（5）viewWillLayoutSubviews：方法是在将要布局子视图的时候调用。<br>（6）viewDidLayoutSubviews：方法是在子视图布局完成后调用。<br>（7）viewDidAppear:(BOOL)animated：方法是视图已经出现。<br>（8）viewWillDisappear:(BOOL)animated：方法是视图即将消失。<br>（9）viewDidDisappear:(BOOL)animated：视图已经消失。<br>（10）dealloc：ViewController被释放时调用。</p>
+<p>注意区分<br>load（）<br>是在程序启动时（无论是否在程序中使用），会调用这个方法，用于类的加载。在main函数之前调用。<br>initialize()类的初始化。</p>
+<h1 id="2、UIview-的生命周期"><a href="#2、UIview-的生命周期" class="headerlink" title="2、UIview 的生命周期"></a>2、UIview 的生命周期</h1><p>一个UIView显示到屏幕上经历了三个过程：</p>
+<p>创建并建立关系：init和addSubView<br>布局：layout<br>绘制：draw</p>
+<h1 id="3、iOS事件传递与响应"><a href="#3、iOS事件传递与响应" class="headerlink" title="3、iOS事件传递与响应"></a>3、iOS事件传递与响应</h1><p>事件的传递和响应的区别：<br>事件的传递是从上到下（父控件到子控件）</p>
+<p>事件的响应是从下到上（顺着响应者链条向上传递：子控件到父控件)</p>
+<p>iOS 事件分为</p>
+<ul>
+<li>触摸事件</li>
+<li>加速计事件</li>
+<li>按压事件（9.0及以后）</li>
+<li>远程控制事件</li>
+</ul>
+<p>1、响应者是什么？<br>响应者就是能够接受并处理事件的对象，就是能传递并能处理事件的对象。<br>2、成为响应者有什么条件呢<br>在iOS中，只有继承自UIResponder的对象，如</p>
+<ul>
+<li>UIApplication</li>
+<li>UIViewController</li>
+<li>UIView<br>3、为什么继承自UIResponder的对象可以响应事件呢？<br>看一下UIResponder类的声明文件<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//触摸事件</span></span><br><span class="line"><span class="comment">// Generally, all responders which do custom touch handling should override all four of these methods.</span></span><br><span class="line"><span class="comment">// Your responder will receive either touchesEnded:withEvent: or touchesCancelled:withEvent: for each</span></span><br><span class="line"><span class="comment">// touch it is handling (those touches it received in touchesBegan:withEvent:).</span></span><br><span class="line"><span class="comment">// *** You must handle cancelled touches to ensure correct behavior in your application.  Failure to</span></span><br><span class="line"><span class="comment">// do so is very likely to lead to incorrect behavior or crashes.</span></span><br><span class="line">- (<span class="keyword">void</span>)touchesBegan:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event;</span><br><span class="line">- (<span class="keyword">void</span>)touchesMoved:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event;</span><br><span class="line">- (<span class="keyword">void</span>)touchesEnded:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event;</span><br><span class="line">- (<span class="keyword">void</span>)touchesCancelled:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event;</span><br><span class="line">- (<span class="keyword">void</span>)touchesEstimatedPropertiesUpdated:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches API_AVAILABLE(ios(<span class="number">9.1</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//按压事件</span></span><br><span class="line"><span class="comment">// Generally, all responders which do custom press handling should override all four of these methods.</span></span><br><span class="line"><span class="comment">// Your responder will receive either pressesEnded:withEvent or pressesCancelled:withEvent: for each</span></span><br><span class="line"><span class="comment">// press it is handling (those presses it received in pressesBegan:withEvent:).</span></span><br><span class="line"><span class="comment">// pressesChanged:withEvent: will be invoked for presses that provide an analog value</span></span><br><span class="line"><span class="comment">// (like thumbsticks or analog push buttons)</span></span><br><span class="line"><span class="comment">// *** You must handle cancelled presses to ensure correct behavior in your application.  Failure to</span></span><br><span class="line"><span class="comment">// do so is very likely to lead to incorrect behavior or crashes.</span></span><br><span class="line">- (<span class="keyword">void</span>)pressesBegan:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UIPress</span> *&gt; *)presses withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIPressesEvent</span> *)event API_AVAILABLE(ios(<span class="number">9.0</span>));</span><br><span class="line">- (<span class="keyword">void</span>)pressesChanged:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UIPress</span> *&gt; *)presses withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIPressesEvent</span> *)event API_AVAILABLE(ios(<span class="number">9.0</span>));</span><br><span class="line">- (<span class="keyword">void</span>)pressesEnded:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UIPress</span> *&gt; *)presses withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIPressesEvent</span> *)event API_AVAILABLE(ios(<span class="number">9.0</span>));</span><br><span class="line">- (<span class="keyword">void</span>)pressesCancelled:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UIPress</span> *&gt; *)presses withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIPressesEvent</span> *)event API_AVAILABLE(ios(<span class="number">9.0</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//加速计事件</span></span><br><span class="line">- (<span class="keyword">void</span>)motionBegan:(<span class="built_in">UIEventSubtype</span>)motion withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event API_AVAILABLE(ios(<span class="number">3.0</span>));</span><br><span class="line">- (<span class="keyword">void</span>)motionEnded:(<span class="built_in">UIEventSubtype</span>)motion withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event API_AVAILABLE(ios(<span class="number">3.0</span>));</span><br><span class="line">- (<span class="keyword">void</span>)motionCancelled:(<span class="built_in">UIEventSubtype</span>)motion withEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event API_AVAILABLE(ios(<span class="number">3.0</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//远程控制事件</span></span><br><span class="line">- (<span class="keyword">void</span>)remoteControlReceivedWithEvent:(<span class="keyword">nullable</span> <span class="built_in">UIEvent</span> *)event API_AVAILABLE(ios(<span class="number">4.0</span>));</span><br></pre></td></tr></table></figure>
+4、事件是如何传递的？</li>
+<li>触摸事件的传递是从父控件传递到子控件，如果父视图不能不能接收触摸事件，那么子控件就无法接收到触摸事件。</li>
+<li>也就是UIApplication-&gt;window-&gt;寻找处理事件最合适的view；</li>
+</ul>
+<p>5、如何找到最合适的控件来处理事件？<br>a、自己是否能接收事件？<br>b、如果能，触摸点是否在自己身上？在，就自己处理，<br>不在，往下遍历控件，重复a b 两个步骤，<br>如果没有符合条件的子控件，那么自己处理是最适合处理。</p>
+<p>6、UIView不能接收触摸事件的三种情况：</p>
+<ul>
+<li>不允许交互：userInteractionEnabled = NO</li>
+<li>隐藏：如果把父控件隐藏，那么子控件也会隐藏，隐藏的控件不能接受事件</li>
+<li>透明度：如果设置一个控件的透明度&lt;0.01，会直接影响子控件的透明度。alpha：0.0~0.01为透明。<br>默认关闭交互的控件有：UILabel UIImageview;设置userInteractionEnabled = true;即可；</li>
+</ul>
+<p>7、事件响应是一个什么样的过程呢？</p>
+<ul>
+<li>4 5 6说的是事件的传递，现在开始说事件的响应。找到适合处理事件的控件之后，以点击为例，调用touchBegin,如果没有重写这个方法,自己处理不了触摸事件。</li>
+<li>默认会把事件传递给上一个响应者,上一个响应者是父控件,交给父控件处理<br>[super touchesBegan:touches withEvent:event]; // 注意不是调用父控件的touches方法，而是调用父类的touches方法</li>
+</ul>
+<p>父类默认会将事件从子视图上传递给父视图进行处理。如果我们重写了touchesBegan，那么将自己处理。</p>
+<p>同时这也解决了一个问题，做到了一个事件多个对象处理。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)touchesBegan:(<span class="built_in">NSSet</span> *)touches withEvent:(<span class="built_in">UIEvent</span> *)event&#123; </span><br><span class="line"><span class="comment">// 1.自己先处理事件...</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"do somthing..."</span>);</span><br><span class="line"><span class="comment">// 2.再调用系统的默认做法，再把事件交给上一个响应者处理</span></span><br><span class="line">[<span class="keyword">super</span> touchesBegan:touches withEvent:event]; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>//好文：<a href="https://www.jianshu.com/p/2e074db792ba" target="_blank" rel="noopener">https://www.jianshu.com/p/2e074db792ba</a></p>
+<p>单例<br>参考：<a href="https://www.jianshu.com/p/a92c0283f243" target="_blank" rel="noopener">https://www.jianshu.com/p/a92c0283f243</a><br><a href="https://www.jianshu.com/p/4bda86e47c0c" target="_blank" rel="noopener">https://www.jianshu.com/p/4bda86e47c0c</a><br>1、如何实现？</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"MySingletonClass.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> MySingletonClass *_instance;</span><br><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MySingletonClass</span></span></span><br><span class="line"></span><br><span class="line">+(MySingletonClass *)sharedMySingletonClass &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        </span><br><span class="line">        _instance = [[MySingletonClass alloc]init];</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> _instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+(<span class="keyword">void</span>)initialize &#123;</span><br><span class="line">    [MySingletonClass sharedMySingletonClass];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+(<span class="keyword">instancetype</span>)alloc &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (_instance) &#123;</span><br><span class="line">        <span class="keyword">return</span> _instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">super</span> alloc];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">id</span>)<span class="keyword">copy</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (_instance) &#123;</span><br><span class="line">           <span class="keyword">return</span> _instance;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">id</span>)mutableCopy &#123;</span><br><span class="line">    <span class="keyword">if</span> (_instance) &#123;</span><br><span class="line">            <span class="keyword">return</span> _instance;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+(<span class="keyword">void</span>)attempDealloc&#123;</span><br><span class="line">   onceToken = <span class="number">0</span>; <span class="comment">// 默认为0，如果创建成功之后，它就会变成1，只有我们之后再置成0,GCD才会认为它从未执行过，我们就又创建了一次单例shareInstance的时候,再次创建对象.</span></span><br><span class="line"><span class="comment">//   [_instance release];</span></span><br><span class="line">   _instance = <span class="literal">nil</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>2、优点？<br>（1）在整个程序中只会实例化一次，所以在程序如果出了问题，可以快速的定位问题所在；<br>（2）由于在整个程序中只存在一个对象，节省了系统内存资源，提高了程序的运行效率；</p>
+<p>3、缺点？<br>（1）不能被继承，不能有子类；<br>（2）不易被重写或扩展（可以使用分类）；<br>（3）同时，由于单例对象只要程序在运行中就会一直占用系统内存，该对象在闲置时并不能销毁，在闲置时也消耗了系统内存资源；</p>
+<p>4、中途销毁？<br>用dispatch_once进行创建单例对象时，onceToken 保障了创建对象只执行一次。<br>它默认为0，如果创建成功之后，它就会变成1，只有我们之后再置成0,GCD才会认为它从未执行过，因此中途销毁，重新创建对象。可以：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- <span class="number">1.</span> 必须把<span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken; 这个拿出函数体，成为全局 --&gt;</span><br><span class="line">+(<span class="keyword">void</span>)attempDealloc&#123;</span><br><span class="line">    onceToken = <span class="number">0</span>; <span class="comment">// 默认为0，如果创建成功之后，它就会变成1，只有我们之后再置成0,GCD才会认为它从未执行过，我们就又创建了一次单例shareInstance的时候,再次创建对象.</span></span><br><span class="line">    _instance = <span class="literal">nil</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 Yelog
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/blog/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 522px;
+    }
+    .nav.fullscreen {
+        margin-left: -522px;
+    }
+    .nav-left {
+        width: 100px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 472px;
+        }
+        .nav.fullscreen {
+            margin-left: -472px;
+        }
+        .nav-left {
+            width: 80px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 472px;
+            margin-left: -472px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
+
+
+</html>
