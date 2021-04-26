@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>iOS内存管理的理解/iOS内存管理 | yahao‘s note</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="iOS内存管理的理解/iOS内存管理 | yahao‘s note">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hello World">
+<meta property="og:url" content="https://xieyahao.github.io/blog/hello-world/index.html">
+<meta property="og:site_name" content="yahao‘s note">
+<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2020-05-29T10:29:00.486Z">
+<meta property="article:modified_time" content="2020-05-29T10:29:00.486Z">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/blog/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/blog/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/blog/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/blog/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="/blog">
+  <input id="theme_shortcut" value="true" />
+</div>
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/blog/" class="avatar_target">
+    <img class="avatar" src="/blog/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span></span>
+</div>
+
+<div class="icon">
+    
+</div>
+
+
+
+<a class="more-menus">更多菜单</a>
+
+
+<ul>
+    <li><div class="all active" data-rel="All">All<small>(5)</small></div></li>
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+    </div>
+    <div></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="5">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的本质">block的本质</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="runtime学习一">runtime学习一</span>
+            <span class="post-date" title="2020-05-28 15:43:26">2020/05/28</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-iOS内存管理的理解/iOS内存管理" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">iOS内存管理的理解/iOS内存管理</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2021-03-30 11:06:27'>2021-03-29 12:07</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS中的内存管理"><span class="toc-text">iOS中的内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？"><span class="toc-text">1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、对于-NSArray-array-生成的对象，非自己生成但持有是如何管理内存的？"><span class="toc-text">2、对于[NSArray array]生成的对象，非自己生成但持有是如何管理内存的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、ARC下是如何使用autorelease的呢？"><span class="toc-text">3、ARC下是如何使用autorelease的呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、所有权修饰符-下的内存管理"><span class="toc-text">4、所有权修饰符 下的内存管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、调试"><span class="toc-text">5、调试</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="iOS中的内存管理"><a href="#iOS中的内存管理" class="headerlink" title="iOS中的内存管理"></a>iOS中的内存管理</h2><p>object-C 中采取ARC（Automatic Reference Counting）机制，让编译器来进行内存管理。</p>
+<h2 id="1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？"><a href="#1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？" class="headerlink" title="1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？"></a>1、手动管理内存时，引用计数式内存管理的思考方式是怎样的？</h2><ul>
+<li>自己生成的对象自己持有；</li>
+<li>非自己生成的对象，自己也能持有；</li>
+<li>不再需要自己持有的对象时释放；</li>
+<li>非自己持有的对象无法释放；</li>
+</ul>
+<p>对应于OC里，<br>alloc/new/copy/mutableCopy等方法   — 生成并持有对象；<br>retain方法 — 持有对象；<br>release方法 — 释放对象；<br>dealloc方法 — 废弃对象；</p>
+<h2 id="2、对于-NSArray-array-生成的对象，非自己生成但持有是如何管理内存的？"><a href="#2、对于-NSArray-array-生成的对象，非自己生成但持有是如何管理内存的？" class="headerlink" title="2、对于[NSArray array]生成的对象，非自己生成但持有是如何管理内存的？"></a>2、对于[NSArray array]生成的对象，非自己生成但持有是如何管理内存的？</h2><p> autorelease；<br> autorelease 会像C语言的自动变量那样，超出作用域时，调用实例的release.不同的是，我们可设置作用域。</p>
+<p>3、autorelease 是如何实现的？<br>（1）调用实例的autorelease方法，就相当于调用正在使用的autoreleasePool对象的addObject的实例方法。将该对象追加到正在使用的NSAutoreleasePool对象的数组里。<br>（2）autoreleasePool是可嵌套的。<br>（3）autoreleasePool对象的生命周期相当于作用域。在ARC环境下，使用@autoreleasepool来定义这个范围。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@autoreleasepool</span> &#123; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>4、autoreleasePool是如何实现的？</p>
+<p>（1）autoreleasePool是以autoreleasePage为单位的双向链表。<br>autoreleasePage是一个结构体,每一个 AutoreleasePoolPage 的大小都是 4096 字节.</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> *objc_autoreleasePoolPush(<span class="keyword">void</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> AutoreleasePoolPage::push();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> objc_autoreleasePoolPop(<span class="keyword">void</span> *ctxt) &#123;</span><br><span class="line">    AutoreleasePoolPage::pop(ctxt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建时，调用AutoreleasePoolPage 的类方法push，</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *push() &#123;</span><br><span class="line">   <span class="keyword">return</span> autoreleaseFast(POOL_SENTINEL);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>AutoreleasePoolPage调用autoreleaseFast方法，并传入哨兵对象（空占位符）。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">id</span> *autoreleaseFast(<span class="keyword">id</span> obj)</span><br><span class="line">&#123;</span><br><span class="line">   AutoreleasePoolPage *page = hotPage();</span><br><span class="line">   <span class="keyword">if</span> (page &amp;&amp; !page-&gt;full()) &#123;</span><br><span class="line">       <span class="keyword">return</span> page-&gt;add(obj);</span><br><span class="line">   &#125; <span class="keyword">else</span> <span class="keyword">if</span> (page) &#123;</span><br><span class="line">       <span class="keyword">return</span> autoreleaseFullPage(obj, page);</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> autoreleaseNoPage(obj);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在autoreleaseFast方法里，</p>
+<ul>
+<li>有 hotPage 并且当前 page 不满<br>调用 page-&gt;add(obj) 方法将对象添加至 AutoreleasePoolPage 的栈中</li>
+<li>有 hotPage 并且当前 page 已满<br>调用 autoreleaseFullPage 初始化一个新的页<br>调用 page-&gt;add(obj) 方法将对象添加至 AutoreleasePoolPage 的栈中</li>
+<li>无 hotPage<br>调用 autoreleaseNoPage 创建一个 hotPage<br>调用 page-&gt;add(obj) 方法将对象添加至 AutoreleasePoolPage 的栈中</li>
+</ul>
+<p>autoreleaseFullPage，就是当前hotPage已满时，调用的方法</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> *autoreleaseFullPage(<span class="keyword">id</span> obj, AutoreleasePoolPage *page) &#123;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (page-&gt;child) page = page-&gt;child;</span><br><span class="line">        <span class="keyword">else</span> page = new AutoreleasePoolPage(page);</span><br><span class="line">    &#125; <span class="keyword">while</span> (page-&gt;full());</span><br><span class="line"></span><br><span class="line">    setHotPage(page);</span><br><span class="line">    <span class="keyword">return</span> page-&gt;add(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它会从传入的 page 开始遍历整个双向链表，直到：</p>
+<ul>
+<li>查找到一个未满的 AutoreleasePoolPage，标记为hotPage ,执行addObj;</li>
+<li>使用构造器传入 parent 创建一个新的 AutoreleasePoolPage；</li>
+</ul>
+<p>autoreleaseNoPage，当没有hotPage 时，调用的方法.用来初始化一个新的AutoreleasePoolPage。并设为hotPag，再addObj.此时，没有相关page 参数，是一个从头创建的双向链表，没有parent指针。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">id</span> *autoreleaseNoPage(<span class="keyword">id</span> obj) &#123;</span><br><span class="line">    AutoreleasePoolPage *page = new AutoreleasePoolPage(<span class="literal">nil</span>);</span><br><span class="line">    setHotPage(page);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (obj != POOL_SENTINEL) &#123;</span><br><span class="line">        page-&gt;add(POOL_SENTINEL);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> page-&gt;add(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> (2) objc_autoreleasePoolPop,做了什么呢？<br> <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> pop(<span class="keyword">void</span> *token) &#123;</span><br><span class="line">    AutoreleasePoolPage *page = pageForPointer(token);</span><br><span class="line">    <span class="keyword">id</span> *stop = (<span class="keyword">id</span> *)token;</span><br><span class="line"></span><br><span class="line">    page-&gt;releaseUntil(stop);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (page-&gt;child) &#123;</span><br><span class="line">        <span class="keyword">if</span> (page-&gt;lessThanHalfFull()) &#123;</span><br><span class="line">            page-&gt;child-&gt;kill();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (page-&gt;child-&gt;child) &#123;</span><br><span class="line">            page-&gt;child-&gt;child-&gt;kill();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果我们的一个 AutoreleasePoolPage 被初始化在内存的 0x100816000 ~ 0x100817000 中，它在内存中的结构：</p>
+<p>有 56 bit 用于存储 AutoreleasePoolPage 的成员变量，剩下的 0x100816038 ~ 0x100817000 都是用来存储加入到自动释放池中的对象。</p>
+<p>begin() 和 end() 这两个类的实例方法帮助我们快速获取 0x100816038 ~ 0x100817000 这一范围的边界地址</p>
+<p> objc_autoreleasePoolPush的返回值正是这个哨兵对象的地址，被objc_autoreleasePoolPop(哨兵对象)作为入参，于是：</p>
+<p>（1）根据传入的哨兵对象地址找到哨兵对象所处的page<br>（2）在当前page中，将晚于哨兵对象插入的所有autorelease对象都发送一次- release消息，并向回移动next指针到正确位置<br>（3）补充2：从最新加入的对象一直向前清理，可以向前跨越若干个page，直到哨兵所在的page</p>
+<p>(1)使用 pageForPointer 获取当前 token 所在的 AutoreleasePoolPage.<br>(2)调用 releaseUntil 方法释放栈中的对象，直到 stop.<br>(3)调用 child 的 kill 方法.</p>
+<p>参考链接：<br><a href="http://blog.sunnyxx.com/2014/10/15/behind-autorelease/" target="_blank" rel="noopener">http://blog.sunnyxx.com/2014/10/15/behind-autorelease/</a><br><a href="https://github.com/Draveness/analyze/blob/master/contents/objc/自动释放池的前世今生.md" target="_blank" rel="noopener">https://github.com/Draveness/analyze/blob/master/contents/objc/自动释放池的前世今生.md</a></p>
+<h2 id="3、ARC下是如何使用autorelease的呢？"><a href="#3、ARC下是如何使用autorelease的呢？" class="headerlink" title="3、ARC下是如何使用autorelease的呢？"></a>3、ARC下是如何使用autorelease的呢？</h2><p>（1）在@autoreleasePool{}中引用的对象;<br> (2)赋值给，显式地使用<strong>autoreleasing修饰符的变量的对象。<br> 同</strong>strong 修饰符一样，显示使用比较罕见。<br>（3）接上，因为，编译器会检查方法名是否以alloc/new/copy/mutableCopy开始，如果不是，会自动将返回值注册到autoreleasePool。符合非自己生成自己也能持有的思想准则。<br>（3）作为函数返回值的对象，编译器也会自动将其注册到autoreleasePool。</p>
+<p> (4）使用/访问附有__weak修饰符的变量，就是使用注册到autoreleasePool的对象。</p>
+<h2 id="4、所有权修饰符-下的内存管理"><a href="#4、所有权修饰符-下的内存管理" class="headerlink" title="4、所有权修饰符 下的内存管理"></a>4、所有权修饰符 下的内存管理</h2><p>（1）__strong；<br>是id类型和对象类型默认的所有权修饰符，因此不需要写上而显得有点罕见；<br>内存管理的特点：</p>
+<ul>
+<li><p>附有__strong修饰符表示对对象的强引用，持有强引用的变量在超出其作用域时，被废弃。随着强引用的失效，引用的对象释放。</p>
+</li>
+<li><p>容易造成循环引用，引起内存泄漏。</p>
+<p>在ARC中的实现：</p>
+</li>
+</ul>
+<p>（2）__weak</p>
+<ul>
+<li>弱引用，不持有对象。在超出变量作用域时，对象被释放。</li>
+<li>在持有某对象的弱引用时，若该对象被废弃，则此弱引用将自动失效且置nil;</li>
+<li>使用附有__weak 修饰符的变量，即是使用注册到autoreleasePool中的对象。</li>
+</ul>
+<p>在ARC中的实现：</p>
+<ul>
+<li><p>初始化__weak修饰符的变量（objc_initWeak）时，<br> 会创建weak表（类似引用计数的散列表），以对象地址为key,弱引用对象的变量地址为值（一或多个）。</p>
+<ul>
+<li>当对象被销毁时，从weak表中获取被废弃对象的地址为键值的记录。</li>
+<li>将包含在记录里的所有弱引用变量的地址，赋值为nil;</li>
+<li>从weak表里删除该记录；</li>
+<li>从引用计数表中，删除废弃对象的的地址为键值的记录；</li>
+</ul>
+</li>
+</ul>
+<p>(3)__unsafe_unretained</p>
+<p>(4)__autoreleasing 修饰符</p>
+<h2 id="5、调试"><a href="#5、调试" class="headerlink" title="5、调试"></a>5、调试</h2><p>_objc_autoreleasePoolPrint()可用来观察注册到autoreleasePool的引用对象。</p>
+<p>_obj_rootRetainCount(obj) 来获取当前引用计数。当对象加入到autoreleasePool时，其引用计数也会+1；</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 Yelog
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/blog/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 522px;
+    }
+    .nav.fullscreen {
+        margin-left: -522px;
+    }
+    .nav-left {
+        width: 100px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 472px;
+        }
+        .nav.fullscreen {
+            margin-left: -472px;
+        }
+        .nav-left {
+            width: 80px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 472px;
+            margin-left: -472px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
+
+
+</html>

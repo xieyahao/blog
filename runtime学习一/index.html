@@ -71,7 +71,7 @@
 
 
 <ul>
-    <li><div class="all active" data-rel="全部文章">全部文章<small>(3)</small></div></li>
+    <li><div class="all active" data-rel="All">All<small>(5)</small></div></li>
     
 </ul>
 <div class="left-bottom">
@@ -85,7 +85,7 @@
     </div>
     <div></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="3">
+<input type="hidden" id="yelog_site_posts_number" value="5">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -96,7 +96,7 @@
     <div class="nav-right">
         <div class="friends-area">
     <div class="friends-title">
-        友情链接
+        Links
         <i class="iconfont icon-left"></i>
     </div>
     <div class="friends-content">
@@ -109,7 +109,7 @@
     <div class="right-top">
         <div id="default-panel">
             <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
-            <div class="right-title">全部文章</div>
+            <div class="right-title">All</div>
             <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
         </div>
         <div id="search-panel">
@@ -136,7 +136,23 @@
     
     <nav id="title-list-nav">
         
-        <a  class="全部文章 "
+        <a  class="All "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="All "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="All "
            href="/blog/hello-world/"
            data-tag=""
            data-author="" >
@@ -144,7 +160,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="全部文章 "
+        <a  class="All "
            href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
            data-tag=""
            data-author="" >
@@ -152,7 +168,7 @@
             <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
         </a>
         
-        <a  class="全部文章 "
+        <a  class="All "
            href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
            data-tag=""
            data-author="" >
@@ -189,14 +205,14 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2020-06-07 10:30:15'>2020-05-28 15:43</time>
+            Created At : <time class="date" title='Updated At: 2020-06-09 14:40:53'>2020-05-28 15:43</time>
         
     </div>
     <div class="article-meta">
         
         
         <span id="busuanzi_container_page_pv">
-            阅读 :<span id="busuanzi_value_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
                 <span class="count-comment">
                     <span class="spinner">
                       <div class="cube1"></div>
@@ -310,6 +326,12 @@
 <p>add_class_to_loadable_list 方法负责将类加入 loadable_classes 集合，而 call_class_loads 负责消费集合中的元素。而对于分类来说，其模型也是类似的，只不过使用了另一个列表 loadable_categories。</p>
 <p>2、“生产” loadable_class</p>
 <p>3、“消费” loadable_class</p>
+<p>4、关于+load方法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Discussion</span><br><span class="line">The load message is sent to classes <span class="keyword">and</span> categories that are both dynamically loaded <span class="keyword">and</span> statically linked, but only <span class="keyword">if</span> the newly loaded <span class="class"><span class="keyword">class</span> <span class="title">or</span> <span class="title">category</span> <span class="title">implements</span> <span class="title">a</span> <span class="title">method</span> <span class="title">that</span> <span class="title">can</span> <span class="title">respond</span>.</span></span><br><span class="line"><span class="class"><span class="title">The</span> <span class="title">order</span> <span class="title">of</span> <span class="title">initialization</span> <span class="title">is</span> <span class="title">as</span> <span class="title">follows</span>:</span></span><br><span class="line"><span class="number">1.</span>All initializers in any framework you link to.</span><br><span class="line"><span class="number">2.</span>All +load methods in your <span class="built_in">image</span>.(这个<span class="built_in">image</span>指的就是二进制可执行文件)</span><br><span class="line"><span class="number">3.</span>All C++ <span class="keyword">static</span> initializers <span class="keyword">and</span> C/C++ __attribute__(constructor) functions in your <span class="built_in">image</span>.</span><br><span class="line"><span class="number">4.</span>All initializers in frameworks that link to you.</span><br><span class="line">In addition:</span><br><span class="line"><span class="number">1.</span>A <span class="class"><span class="keyword">class</span>’<span class="title">s</span> +<span class="title">load</span> <span class="title">method</span> <span class="title">is</span> <span class="title">called</span> <span class="title">after</span> <span class="title">all</span> <span class="title">of</span> <span class="title">its</span> <span class="title">superclasses</span>’ +<span class="title">load</span> <span class="title">methods</span>.</span></span><br><span class="line"><span class="class">2.<span class="title">A</span> <span class="title">category</span> +<span class="title">load</span> <span class="title">method</span> <span class="title">is</span> <span class="title">called</span> <span class="title">after</span> <span class="title">the</span> <span class="title">class</span>’<span class="title">s</span> <span class="title">own</span> +<span class="title">load</span> <span class="title">method</span>.</span></span><br><span class="line"><span class="class"><span class="title">In</span> <span class="title">a</span> <span class="title">custom</span> <span class="title">implementation</span> <span class="title">of</span> <span class="title">load</span> <span class="title">you</span> <span class="title">can</span> <span class="title">therefore</span> <span class="title">safely</span> <span class="title">message</span> <span class="title">other</span> <span class="title">unrelated</span> <span class="title">classes</span> <span class="title">from</span> <span class="title">the</span> <span class="title">same</span> <span class="title">image</span>, <span class="title">but</span> <span class="title">any</span> <span class="title">load</span> <span class="title">methods</span> <span class="title">implemented</span> <span class="title">by</span> <span class="title">those</span> <span class="title">classes</span> <span class="title">may</span> <span class="title">not</span> <span class="title">have</span> <span class="title">run</span> <span class="title">yet</span>.</span></span><br></pre></td></tr></table></figure>
+<p>a、load函数是只要你动态加载或者静态引用了这个类，那么load就会被执行，它并不需要你显示的去创建一个类后才会执行，同时只执行一次。</p>
+<p>b、关于load的执行顺序问题，所有的superclass的load执行完以后才会执行该类的load，以及class中的load方法是先于category中的load执行的，不同的类之间的 +load()方法的调用顺序是不确定的。</p>
+<p>c、由于它的调用不是惰性的，且其只会在程序调用期间调用一次，最最重要的是，如果在类与分类中都实现了 load 方法，它们都会被调用，不像其它的在分类中实现的方法会被覆盖，这就使 load 方法成为了方法调剂的绝佳时机。</p>
+<p>d、由于 load 方法的运行时间过早，千万不要在这里初始化OC的对象，因为load执行的时候你不知道你使用的对象是否已经被加载进来，所以无法预知情况。不过在这个时间点，所有的 framework 都已经加载到了运行时中，所以调用 framework 中的方法都是安全的。</p>
 <p>关于验证可参考 <a href="https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构" target="_blank" rel="noopener">https://github.com/draveness/analyze/blob/master/contents/objc/深入解析%20ObjC%20中方法的结构.md#深入解析-objc-中方法的结构</a> </p>
 <p>参考：<a href="https://halfrost.com/objc_runtime_isa_class/" target="_blank" rel="noopener">https://halfrost.com/objc_runtime_isa_class/</a><br><a href="https://www.jianshu.com/p/4546f22b2e96" target="_blank" rel="noopener">https://www.jianshu.com/p/4546f22b2e96</a></p>
 <p><a href="https://blog.csdn.net/shengpeng3344/article/details/105800310?utm_medium=distribute.pc_relevant.none-task-blog-baidujs-1" target="_blank" rel="noopener">https://blog.csdn.net/shengpeng3344/article/details/105800310?utm_medium=distribute.pc_relevant.none-task-blog-baidujs-1</a></p>
@@ -388,33 +410,33 @@
     
     
     .nav {
-        width: 542px;
+        width: 522px;
     }
     .nav.fullscreen {
-        margin-left: -542px;
+        margin-left: -522px;
     }
     .nav-left {
-        width: 120px;
+        width: 100px;
     }
     
     
     @media screen and (max-width: 1468px) {
         .nav {
-            width: 492px;
+            width: 472px;
         }
         .nav.fullscreen {
-            margin-left: -492px;
+            margin-left: -472px;
         }
         .nav-left {
-            width: 100px;
+            width: 80px;
         }
     }
     
     
     @media screen and (max-width: 1024px) {
         .nav {
-            width: 492px;
-            margin-left: -492px
+            width: 472px;
+            margin-left: -472px
         }
         .nav.fullscreen {
             margin-left: 0;
