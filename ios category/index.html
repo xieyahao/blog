@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ios category | yahao‘s note</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="ios category | yahao‘s note">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="1、https:&#x2F;&#x2F;blog.csdn.net&#x2F;leiyutinghua&#x2F;article&#x2F;details&#x2F;53785935绘图方式 一、性能优化 1、tableview 的优化（1） 使用cell的重用标识；（2）减少cell中控件的数量， 少用addview 给cell 动态加载视图，最好在创建cell时，确定好布局；（3）善用局部刷新 reloadrow sections；（4）缓存行高，固定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习笔记">
+<meta property="og:url" content="https://xieyahao.github.io/blog/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="yahao‘s note">
+<meta property="og:description" content="1、https:&#x2F;&#x2F;blog.csdn.net&#x2F;leiyutinghua&#x2F;article&#x2F;details&#x2F;53785935绘图方式 一、性能优化 1、tableview 的优化（1） 使用cell的重用标识；（2）减少cell中控件的数量， 少用addview 给cell 动态加载视图，最好在创建cell时，确定好布局；（3）善用局部刷新 reloadrow sections；（4）缓存行高，固定">
+<meta property="og:locale" content="zh">
+<meta property="article:published_time" content="2021-04-26T02:21:38.749Z">
+<meta property="article:modified_time" content="2021-04-26T02:25:19.083Z">
+<meta property="article:author" content="xyh">
+<meta property="article:tag" content="ios">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/blog/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/blog/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/blog/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/blog/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="/blog">
+  <input id="theme_shortcut" value="true" />
+</div>
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/blog/" class="avatar_target">
+    <img class="avatar" src="/blog/img/avatar.jpg" />
+</a>
+<div class="author">
+    <span>xyh</span>
+</div>
+
+<div class="icon">
+    
+</div>
+
+
+
+<a class="more-menus">更多菜单</a>
+
+
+<ul>
+    <li><div class="all active" data-rel="全部文章">全部文章<small>(12)</small></div></li>
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+    </div>
+    <div></div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="12">
+
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" />
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        <a  class="全部文章 "
+           href="/blog/ios%20category/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="ios category">ios category</span>
+            <span class="post-date" title="2021-06-23 11:35:34">2021/06/23</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/ios%20atomic%E4%B8%8Enonatomic/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="ios atomic与nonatomic">ios atomic与nonatomic</span>
+            <span class="post-date" title="2021-06-04 17:14:12">2021/06/04</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="学习笔记">学习笔记</span>
+            <span class="post-date" title="2021-04-26 10:21:38">2021/04/26</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%9A%84%E7%90%86%E8%A7%A3/iOS%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存管理的理解/iOS内存管理">iOS内存管理的理解/iOS内存管理</span>
+            <span class="post-date" title="2021-03-29 12:07:53">2021/03/29</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/viewController_life_time/ios_life_time%20/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="viewController_life_time/ios_life_time ">viewController_life_time/ios_life_time </span>
+            <span class="post-date" title="2021-03-25 15:32:23">2021/03/25</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/block%E7%9A%84%E7%90%86%E8%A7%A3/block%E7%9A%84%E7%90%86%E8%A7%A3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的理解/block的理解">block的理解/block的理解</span>
+            <span class="post-date" title="2021-03-23 14:48:32">2021/03/23</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/iOS%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="iOS内存泄漏">iOS内存泄漏</span>
+            <span class="post-date" title="2021-03-19 13:54:34">2021/03/19</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="深拷贝与浅拷贝">深拷贝与浅拷贝</span>
+            <span class="post-date" title="2021-03-19 10:28:36">2021/03/19</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-core%20animation/coreAnimationAdvancedTechniques/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="读书笔记-core animation/coreAnimationAdvancedTechniques">读书笔记-core animation/coreAnimationAdvancedTechniques</span>
+            <span class="post-date" title="2020-06-16 14:59:51">2020/06/16</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/hello-world/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="Hello World">Hello World</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/block%E7%9A%84%E6%9C%AC%E8%B4%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="block的本质">block的本质</span>
+            <span class="post-date" title="2020-05-29 18:29:00">2020/05/29</span>
+        </a>
+        
+        <a  class="全部文章 "
+           href="/blog/runtime%E5%AD%A6%E4%B9%A0%E4%B8%80/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="runtime学习一">runtime学习一</span>
+            <span class="post-date" title="2020-05-28 15:43:26">2020/05/28</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-ios category" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">ios category</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2021-06-23 11:35:34'>2021-06-23 11:35</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、类目的使用？"><span class="toc-text">1、类目的使用？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、回顾下属性的添加"><span class="toc-text">2、回顾下属性的添加</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？"><span class="toc-text">3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？"><span class="toc-text">4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、验证在category是在运行期内决定的。"><span class="toc-text">4、验证在category是在运行期内决定的。</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#（1）category编译期探索"><span class="toc-text">（1）category编译期探索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#（2）Category运行期的探索"><span class="toc-text">（2）Category运行期的探索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5、类的-load方法能够调用category里的方法吗？"><span class="toc-text">5、类的+load方法能够调用category里的方法吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6、常见问题-initialize-与-load-的不同"><span class="toc-text">6、常见问题 +initialize 与 +load 的不同</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>类目 </p>
+<h2 id="1、类目的使用？"><a href="#1、类目的使用？" class="headerlink" title="1、类目的使用？"></a>1、类目的使用？</h2><ul>
+<li><p>类目可以为已有类添加方法，</p>
+</li>
+<li><p>无法添加成员变量（编译时报红<code>Instance variables may not be placed in categories</code>）.</p>
+</li>
+<li><p>添加属性时，无法进行存取（因为无法生成成员变量，无法自动生成getter/setter方法）。报错信息如下：<code>&#39;-[Person setSchools:]: unrecognized selector sent to instance 0x281f60000&#39;</code></p>
+</li>
+</ul>
+<h2 id="2、回顾下属性的添加"><a href="#2、回顾下属性的添加" class="headerlink" title="2、回顾下属性的添加"></a>2、回顾下属性的添加</h2><ul>
+<li><p>属性和成员变量的区别</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>)<span class="built_in">NSArray</span> *schools;</span><br></pre></td></tr></table></figure>
+<p>如上，在类中，我们声明一个属性后，会发现编译器自动为我们生成以下划线开头的实例变量_school，我们也可以使用<code>self.school</code>来对属性存取值，证明也自动给我们生成了setter/getter方法。</p>
+<p>这里可以提一下<code>@synthesize</code>关键字，在低Xcode版本中，声明属性后，必须用<code>@synthesize</code>才能生成实例变量与setter/getter方法。现在<code>@synthesize</code>多用于指定实例变量的别名。</p>
+</li>
+</ul>
+<h2 id="3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？"><a href="#3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？" class="headerlink" title="3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？"></a>3、我们通常可以通过runtime来为category添加属性，这是怎么实现的呢？</h2><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">NSArray</span> *)schools &#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, &amp;schoolKey);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)setSchools:(<span class="built_in">NSArray</span> *)schools &#123;</span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, &amp;schoolKey, schools, OBJC_ASSOCIATION_COPY);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是通过指定key值给给定的对象（self）返回一个关联对象来实现的。</p>
+<h2 id="4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？"><a href="#4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？" class="headerlink" title="4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？"></a>4、添加了属性的问题解决了，但是绕过了实例变量，那么无法添加实例变量的原因是什么呢？</h2><p>先说一个可以添加实例变量的，extension常被称为匿名的category，一般用来隐藏类的私有信息。extension在编译期决议，就是类的一部分，在编译器和头文件里的<code>@interface</code>和实现文件里的<code>@implement</code>一起组成一个完整的类。他的生命周期伴随着类的产生和销毁。</p>
+<p>category 是在运行时期决议，我们可据此推导出extension可添加实例变量，而category无法添加成员变量。因为在运行期，对象的内存布局已经确定，添加实例变量会改变类的内存布局，如果发生的话，对象就已经改变了,成为了无效对象。这是错误的。</p>
+<h2 id="4、验证在category是在运行期内决定的。"><a href="#4、验证在category是在运行期内决定的。" class="headerlink" title="4、验证在category是在运行期内决定的。"></a>4、验证在category是在运行期内决定的。</h2><h3 id="（1）category编译期探索"><a href="#（1）category编译期探索" class="headerlink" title="（1）category编译期探索"></a>（1）category编译期探索</h3><p>首先写一个我创建了一个自定义类Person的分类Person+studyExperience.h文件代码如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> (<span class="title">studyExperience</span>)</span></span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>)<span class="built_in">NSArray</span> *schools;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line">``` </span><br><span class="line">``` objc</span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span> (<span class="title">studyExperience</span>)</span></span><br><span class="line">- (<span class="keyword">void</span>)study &#123;    </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+
+<p>通过<code>clang -rewrite-objc Person+studyExperience.m</code>命令，找到编译后的.cpp文件。</p>
+<ul>
+<li>类和对象的定义都是结构体，category也一样，它的的结构定义如下：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">category_t</span> &#123;</span></span><br><span class="line">   <span class="keyword">const</span> <span class="keyword">char</span> *name;<span class="comment">//名字</span></span><br><span class="line">   <span class="keyword">classref_t</span> cls; <span class="comment">//类</span></span><br><span class="line">  </span><br><span class="line">   <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">method_list_t</span> *<span class="title">instance_methods</span>;</span><span class="comment">//实例方法</span></span><br><span class="line"><span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">method_list_t</span> *<span class="title">class_methods</span>;</span><span class="comment">//类方法</span></span><br><span class="line"><span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">protocol_list_t</span> *<span class="title">protocols</span>;</span><span class="comment">//协议</span></span><br><span class="line"><span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> _<span class="title">prop_list_t</span> *<span class="title">properties</span>;</span><span class="comment">//属性</span></span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从上面我们也可以看到，category没有实例变量。继续搜索 <code>_category_t</code> 找到了我们写的分类 <code>person+studyExperience</code></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">category_t</span> _<span class="title">OBJC_</span>$_<span class="title">CATEGORY_Person_</span>$_<span class="title">studyExperience</span> __<span class="title">attribute__</span> ((<span class="title">used</span>, <span class="title">section</span> ("__<span class="title">DATA</span>,__<span class="title">objc_const</span>"))) = </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="string">"Person"</span>,</span><br><span class="line">	<span class="number">0</span>, <span class="comment">// &amp;OBJC_CLASS_$_Person,</span></span><br><span class="line">	(<span class="keyword">const</span> struct <span class="keyword">_method_list_t</span> *)&amp;_OBJC_$_CATEGORY_INSTANCE_METHODS_Person_$_studyExperience,</span><br><span class="line">	<span class="number">0</span>,</span><br><span class="line">	<span class="number">0</span>,</span><br><span class="line">	(<span class="keyword">const</span> struct <span class="keyword">_prop_list_t</span> *)&amp;_OBJC_$_PROP_LIST_Person_$_studyExperience,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>__attribute__((used))</code> 是变量的属性，主要用来通知编译器保留静态变量，即使没有被使用。仅仅被标记为<code>used</code>的静态变量被排放在一个单独的<code>section</code>里。使用<code>__attribute__((section(&quot;name&quot;)))</code>可以为变量们指定一个可以放置的<code>section</code>。<br><a href="https://developer.arm.com/documentation/dui0491/c/Compiler-specific-Features/--attribute----used---variable-attribute" target="_blank" rel="noopener">点击了解更多关于attribute编译属性的内容</a></p>
+</li>
+<li><p>这里的<code>section (&quot;__DATA,__objc_const&quot;)</code>是一个段标识，具体是什么我还不大清楚。先理解为，这个段标识在编译期会存放到<code>Mach-o</code>文件的<code>section</code>段里，可执行文件<code>Mach-o</code>会被<code>dyld</code>加载。 这句可理解为将数据写入到<code>section</code>的<code>DATA</code>中名称为<code>__objc_const</code>的区域里。</p>
+</li>
+<li><p>该函数可看作调用构造函数，对照<code>_category_t</code>结构体参数，分别找到了类的<code>name</code>- <code>Person</code>, 实例方法<code>studyExperience</code>,属性<code>studyExperience</code>.</p>
+</li>
+<li><p>实例方法和属性的具体实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> _OBJC_$_CATEGORY_INSTANCE_METHODS_Person_$_studyExperience __attribute__ ((used, section (<span class="string">"__DATA,__objc_const"</span>))) = &#123;</span><br><span class="line">	<span class="keyword">sizeof</span>(_objc_method),</span><br><span class="line">	<span class="number">1</span>,</span><br><span class="line">	&#123;&#123;(struct objc_selector *)<span class="string">"study"</span>, <span class="string">"v16@0:8"</span>, (<span class="keyword">void</span> *)_I_Person_studyExperience_study&#125;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> _OBJC_$_PROP_LIST_Person_$_studyExperience __attribute__ ((used, section (<span class="string">"__DATA,__objc_const"</span>))) = &#123;</span><br><span class="line">	<span class="keyword">sizeof</span>(<span class="keyword">_prop_t</span>),</span><br><span class="line">	<span class="number">1</span>,</span><br><span class="line">	&#123;&#123;<span class="string">"schools"</span>,<span class="string">"T@\"NSArray\",C,N"</span>&#125;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>同样的 我们看到了 <code>section (&quot;__DATA,__objc_const</code>,还是理解为把对应的属性/方法，在编译时，存储在会被<code>dyld</code>加载的可执行文件<code>Macho</code>文件的<code>section</code>段里。</p>
+</li>
+<li><p>第一个对应的是实例函数，这里保存了这个方法的大小，个数、方法本身，我们可对照<code>_objc_method</code>的结构体，第三个参数，调用了构造函数。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> _objc_method &#123;</span><br><span class="line">	<span class="keyword">struct</span> objc_selector * _cmd;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> *method_type;</span><br><span class="line">	<span class="keyword">void</span>  *_imp;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>category中的属性也是相同，不再叙述。</p>
+</li>
+<li><p>我们了解到以上的内容主要是category的初始化，并保存在可执行文件<code>Macho</code>里。</p>
+</li>
+</ul>
+<p>继续搜索<code>_category_t</code>,看到如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">category_t</span> *<span class="title">L_OBJC_LABEL_CATEGORY_</span>$ [1] __<span class="title">attribute__</span>((<span class="title">used</span>, <span class="title">section</span> ("__<span class="title">DATA</span>, __<span class="title">objc_catlist</span>,<span class="title">regular</span>,<span class="title">no_dead_strip</span>")))= &#123;</span></span><br><span class="line">	&amp;_OBJC_$_CATEGORY_Person_$_studyExperience,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>看到 <code>section ...</code>我们了解到，这个函数是把整个category保存了起来。编译器在DATA段下<code>__objc_catlist</code>里保存了一个数组长度为1的数组<code>L_OBJC_LABEL_CATEGORY_</code>(如果有多个category，数组中会有多个元素)。</li>
+</ul>
+<p>到目前我们可以做一个编译期的总结了，在编译期，完成了category struct 的构造，以及分别将category struct、category中的实例方法、category中的属性保存在<code>section</code>的 <code>DATA</code>中名为<code>__objc_const</code>的区域，以数组形式保存category在<code>__objc_catlist</code>中。</p>
+<h3 id="（2）Category运行期的探索"><a href="#（2）Category运行期的探索" class="headerlink" title="（2）Category运行期的探索"></a>（2）Category运行期的探索</h3><p>了解到编译期主要做了保存的操作，那么运行期毫无疑问是加载的操作了，需要将编译期保存的内容进行加载。</p>
+<ul>
+<li>加载具体流程涉及到了编译链接的内容，我们只分析 runtime是如何加载category的。<br>object-C的运行是依赖runtime的，而runtime与其他系统库一样，是OS X和iOS通过dyld动态加载的。</li>
+</ul>
+<p>我们在 <code>objc-runtime-new.mm</code>文件中搜索<code>methodizeClass</code>,首先看到注释：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/***********************************************************************</span></span><br><span class="line"><span class="comment">	* methodizeClass</span></span><br><span class="line"><span class="comment">	* Fixes up cls's method list, protocol list, and property list.//修复类的方法列表、协议列表、属性列表。</span></span><br><span class="line"><span class="comment">	* Attaches any outstanding categories. //附加所有未关联的类目</span></span><br><span class="line"><span class="comment">	* Locking: runtimeLock must be held by the caller</span></span><br><span class="line"><span class="comment">     **********************************************************************/</span></span><br><span class="line"></span><br><span class="line">其中</span><br><span class="line">	<span class="keyword">if</span> (rwe) rwe-&gt;methods.attachLists(&amp;<span class="built_in">list</span>, <span class="number">1</span>);</span><br><span class="line">	rwe-&gt;properties.attachLists(&amp;proplist, <span class="number">1</span>);</span><br><span class="line">	rwe-&gt;protocols.attachLists(&amp;protolist, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>继续找，找到<code>void attachLists(List* const * addedLists, uint32_t addedCount)</code>方法，看一下它的关键实践部分：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// many lists -&gt; many lists</span></span><br><span class="line">        <span class="keyword">uint32_t</span> oldCount = <span class="built_in">array</span>()-&gt;count;</span><br><span class="line">        <span class="keyword">uint32_t</span> newCount = oldCount + addedCount;</span><br><span class="line">        <span class="keyword">array_t</span> *newArray = (<span class="keyword">array_t</span> *)<span class="built_in">malloc</span>(<span class="keyword">array_t</span>::byteSize(newCount));<span class="comment">//初始化了一个count为原list长度+需要added list count。</span></span><br><span class="line">        newArray-&gt;count = newCount;</span><br><span class="line">        <span class="built_in">array</span>()-&gt;count = newCount;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = oldCount - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">            newArray-&gt;lists[i + addedCount] = <span class="built_in">array</span>()-&gt;lists[i];</span><br><span class="line"><span class="comment">//循环给新list赋值，新list index从added list count 开始，排放原list的倒序元素。</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> i = <span class="number">0</span>; i &lt; addedCount; i++)</span><br><span class="line">            newArray-&gt;lists[i] = addedLists[i];</span><br><span class="line"><span class="comment">//循环给新list赋值，新list index从0 开始添加added list 的正序元素。</span></span><br><span class="line">        <span class="built_in">free</span>(<span class="built_in">array</span>());</span><br><span class="line">        setArray(newArray);</span><br><span class="line">        validate();</span><br></pre></td></tr></table></figure>
+
+<p>在attachLists中，category中的属性列表、方法列表、协议列表分别都被添加到了类原先的列表中，且顺序在前。</p>
+<h2 id="5、类的-load方法能够调用category里的方法吗？"><a href="#5、类的-load方法能够调用category里的方法吗？" class="headerlink" title="5、类的+load方法能够调用category里的方法吗？"></a>5、类的+load方法能够调用category里的方法吗？</h2><p>（1）从runtime源码中看，在<code>load_images</code>方法中，实现了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Call +load methods (without runtimeLock - re-entrant)</span></span><br><span class="line">  call_load_methods();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>此处是 调用+load方法</p>
+</li>
+<li><p>调用+load方法 是在 加载category 之后,因此是可以的。（加载category是在map_images中,–&gt;readImages–&gt;realizeClassWithoutSwift–&gt;methodizeClass里）</p>
+</li>
+<li><p>map_images 是在objc-os.mm文件中，是runtime的入口方法。如下（<a href="https://github.com/RetVal/objc-runtime" target="_blank" rel="noopener">runtime源码下载</a>：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************************</span></span><br><span class="line"><span class="comment">* _objc_init</span></span><br><span class="line"><span class="comment">* Bootstrap initialization. Registers our image notifier with dyld.</span></span><br><span class="line"><span class="comment">* Called by libSystem BEFORE library initialization time</span></span><br><span class="line"><span class="comment">**********************************************************************/</span></span><br><span class="line"><span class="keyword">void</span> _objc_init(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">   	<span class="keyword">static</span> <span class="keyword">bool</span> initialized = <span class="literal">false</span>;</span><br><span class="line">   	<span class="keyword">if</span> (initialized) <span class="keyword">return</span>;</span><br><span class="line">   	initialized = <span class="literal">true</span>;</span><br><span class="line">   </span><br><span class="line">   	<span class="comment">// fixme defer initialization until an objc-using image is found?</span></span><br><span class="line">   	environ_init();</span><br><span class="line">   	tls_init();</span><br><span class="line">   	static_init();</span><br><span class="line">   	runtime_init();</span><br><span class="line">   	exception_init();</span><br><span class="line">   	cache_init();</span><br><span class="line">   	_imp_implementationWithBlock_init();</span><br><span class="line"></span><br><span class="line">   	_dyld_objc_notify_register(&amp;map_images, load_images, unmap_image);</span><br><span class="line"></span><br><span class="line">	<span class="meta">#<span class="meta-keyword">if</span> __OBJC2__</span></span><br><span class="line">  	 	didCallDyldNotifyRegister = <span class="literal">true</span>;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>继续看一下<code>call_load_methods</code>方法</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************************</span></span><br><span class="line"><span class="comment">* call_load_methods</span></span><br><span class="line"><span class="comment">* Call all pending class and category +load methods.</span></span><br><span class="line"><span class="comment">* Class +load methods are called superclass-first. </span></span><br><span class="line"><span class="comment">* Category +load methods are not called until after the parent class's +load.</span></span><br><span class="line"><span class="comment">* 这个注释也 提示了我们，调用+load方法的先后顺序依次是：父类的 类 分类；</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">* This method must be RE-ENTRANT, because a +load could trigger </span></span><br><span class="line"><span class="comment">* more image mapping. In addition, the superclass-first ordering </span></span><br><span class="line"><span class="comment">* must be preserved in the face of re-entrant calls. Therefore, </span></span><br><span class="line"><span class="comment">* only the OUTERMOST call of this function will do anything, and </span></span><br><span class="line"><span class="comment">* that call will handle all loadable classes, even those generated </span></span><br><span class="line"><span class="comment">* while it was running.</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* The sequence below preserves +load ordering in the face of </span></span><br><span class="line"><span class="comment">* image loading during a +load, and make sure that no </span></span><br><span class="line"><span class="comment">* +load method is forgotten because it was added during </span></span><br><span class="line"><span class="comment">* a +load call.</span></span><br><span class="line"><span class="comment">* Sequence:</span></span><br><span class="line"><span class="comment">* 1. Repeatedly call class +loads until there aren't any more</span></span><br><span class="line"><span class="comment">* 2. Call category +loads ONCE.</span></span><br><span class="line"><span class="comment">* 3. Run more +loads if:</span></span><br><span class="line"><span class="comment">*    (a) there are more classes to load, OR</span></span><br><span class="line"><span class="comment">*    (b) there are some potential category +loads that have </span></span><br><span class="line"><span class="comment">*        still never been attempted.</span></span><br><span class="line"><span class="comment">* Category +loads are only run once to ensure "parent class first" </span></span><br><span class="line"><span class="comment">* ordering, even if a category +load triggers a new loadable class </span></span><br><span class="line"><span class="comment">* and a new loadable category attached to that class. </span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* Locking: loadMethodLock must be held by the caller </span></span><br><span class="line"><span class="comment">*   All other locks must not be held.</span></span><br><span class="line"><span class="comment">**********************************************************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">call_load_methods</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">bool</span> loading = NO;</span><br><span class="line">    <span class="keyword">bool</span> more_categories;</span><br><span class="line"></span><br><span class="line">    loadMethodLock.assertLocked();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Re-entrant calls do nothing; the outermost call will finish the job.</span></span><br><span class="line">    <span class="keyword">if</span> (loading) <span class="keyword">return</span>;</span><br><span class="line">    loading = YES;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> *pool = objc_autoreleasePoolPush();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// 1. Repeatedly call class +loads until there aren't any more</span></span><br><span class="line">		<span class="comment">//重复地调用类的 +load方法，直到没有没被加载的类为止</span></span><br><span class="line">        <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            call_class_loads();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. Call category +loads ONCE</span></span><br><span class="line">		<span class="comment">//调用 所有category 的load 方法</span></span><br><span class="line">        more_categories = call_category_loads();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. Run more +loads if there are classes OR more untried categories</span></span><br><span class="line">		<span class="comment">// 调用+load方法如果还有 没被加载的类或类目。</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>  ||  more_categories);</span><br><span class="line"></span><br><span class="line">    objc_autoreleasePoolPop(pool);</span><br><span class="line"></span><br><span class="line">    loading = NO;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注释也很明白， 先调用call_class_loads()， 再调用call_category_loads()，这就说明了在调用所有的+load方法时，首先调用了所有类的+load方法，再去调用分类中的+load方法。</p>
+</li>
+</ul>
+<ul>
+<li>点进去，<code>call_class_loads</code>,<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">call_class_loads</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Detach current loadable list.</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">loadable_class</span> *<span class="title">classes</span> = <span class="title">loadable_classes</span>;</span></span><br><span class="line">    <span class="keyword">int</span> used = loadable_classes_used;</span><br><span class="line">    loadable_classes = nil;</span><br><span class="line">    loadable_classes_allocated = <span class="number">0</span>;</span><br><span class="line">    loadable_classes_used = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Call all +loads for the detached list.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; used; i++) &#123;</span><br><span class="line">        Class cls = classes[i].cls;</span><br><span class="line">        <span class="keyword">load_method_t</span> load_method = (<span class="keyword">load_method_t</span>)classes[i].method;</span><br><span class="line">        <span class="keyword">if</span> (!cls) <span class="keyword">continue</span>; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (PrintLoading) &#123;</span><br><span class="line">            _objc_inform(<span class="string">"LOAD: +[%s load]\n"</span>, cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line">        (*load_method)(cls, @selector(load));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Destroy the detached list.</span></span><br><span class="line">    <span class="keyword">if</span> (classes) <span class="built_in">free</span>(classes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>那么父类+load顺序呢？<br>从<code>call_class_loads</code>中，我们注意到，有一个loadable_classes的list，找一下，我们看下runtime是如何在这个list里排序的。<br>我们从个源码中可以找到这样一个方法，prepare_load_methods，在其实现中调用了schedule_class_load方法，我们看一下schedule_class_load的源码  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************************************************</span></span><br><span class="line"><span class="comment">* prepare_load_methods</span></span><br><span class="line"><span class="comment">* Schedule +load for classes in this image, any un-+load-ed </span></span><br><span class="line"><span class="comment">* superclasses in other images, and any categories in this image.</span></span><br><span class="line"><span class="comment">**********************************************************************/</span></span><br><span class="line"><span class="comment">// Recursively schedule +load for cls and any un-+load-ed superclasses.</span></span><br><span class="line">递归</span><br><span class="line"><span class="comment">// cls must already be connected.</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">schedule_class_load</span><span class="params">(Class cls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!cls) <span class="keyword">return</span>;</span><br><span class="line">    ASSERT(cls-&gt;isRealized());  <span class="comment">// _read_images should realize</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cls-&gt;data()-&gt;flags &amp; RW_LOADED) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Ensure superclass-first ordering</span></span><br><span class="line">    schedule_class_load(cls-&gt;superclass);</span><br><span class="line"></span><br><span class="line">    add_class_to_loadable_list(cls);</span><br><span class="line">    cls-&gt;setInfo(RW_LOADED); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从源码中 schedule_class_load(cls-&gt;superclass);这一句中可以看出，递归调用自己本身，并且传入自己的父类，结果递归之后，才调用add_class_to_loadable_list，这就说明父类总是在子类前面加入到list当中，所有在调用一个类的+load方法之前，肯定要先调用其父类的+load方法。</p>
+<ul>
+<li>那么到此，我们可以得出结论，调用+load方法的先后顺序依次是：父类 类 分类；没有继承关系的，就和编译顺序有关了，<a href="https://tech.meituan.com/2015/03/03/diveintocategory.html" target="_blank" rel="noopener">这里有个改变项目里buildPhases里compile sources的顺序，得出结论的博客</a></li>
+</ul>
+<ul>
+<li>取到每个类的+load函数的指针，直接通过指针调用了这个函数。 <code>call_category_loads()</code>函数中体现出来的Category的+load方法的调用，也是同理。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>+load方法会在runtime加载类和分类时调用，每个类和分类的+load方法只会调用一次。<br>调用顺序：</p>
+<p>先调用类的+load</p>
+<ul>
+<li>按照编译顺序调用</li>
+<li>调用子类+load之前，先调用父类的+load</li>
+<li>再按照编译顺序，调用分类的+load</li>
+</ul>
+<h2 id="6、常见问题-initialize-与-load-的不同"><a href="#6、常见问题-initialize-与-load-的不同" class="headerlink" title="6、常见问题 +initialize 与 +load 的不同"></a>6、常见问题 +initialize 与 +load 的不同</h2><p>（1）调用方式<br>load是根据函数地址直接调用<br>initialize是通过消息机制objc_msgSend调用<br>（2）调用时刻<br>load是在runtime加载类和分类时调用（只会调用一次）<br>initialize是在类第一次收到消息时调用个，默认没有继承的情况下每个类只会initialize一次（父类的initialize可能会被执行多次）<br>（3）调用顺序<br>load<br>先调用类的load：先编译的类先调用，子类调用之前，先调用父类的<br>在调用Category的load：先编译的先调用</p>
+<p>initialize<br>先初始化父类<br>在初始化子类（初始化子类可能调用父类的initialize）</p>
+<p>这里有一篇讲，Objective-C不能添加成员变量的原因<a href="http://quotation.github.io/objc/2015/05/21/objc-runtime-ivar-access.html" target="_blank" rel="noopener">点击</a></p>
+<p>延展 </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> /*_<span class="title">method_list_t</span>*/ &#123;</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> entsize;  <span class="comment">// sizeof(struct _objc_method)</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> method_count;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">objc_method</span> <span class="title">method_list</span>[1];</span></span><br><span class="line">&#125; _OBJC_$_CATEGORY_INSTANCE_METHODS_MyClass_$_MyAddition __attribute__ ((used, section (<span class="string">"__DATA,__objc_const"</span>))) = &#123;</span><br><span class="line"><span class="keyword">sizeof</span>(_objc_method),</span><br><span class="line"><span class="number">1</span>,</span><br><span class="line">&#123;&#123;(struct objc_selector *)<span class="string">"printName"</span>, <span class="string">"v16@0:8"</span>, (<span class="keyword">void</span> *)_I_MyClass_MyAddition_printName&#125;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> /*_<span class="title">prop_list_t</span>*/ &#123;</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> entsize;  <span class="comment">// sizeof(struct _prop_t)</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> count_of_properties;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">prop_t</span> <span class="title">prop_list</span>[1];</span></span><br><span class="line">&#125; _OBJC_$_PROP_LIST_MyClass_$_MyAddition __attribute__ ((used, section (<span class="string">"__DATA,__objc_const"</span>))) = &#123;</span><br><span class="line"><span class="keyword">sizeof</span>(<span class="keyword">_prop_t</span>),</span><br><span class="line"><span class="number">1</span>,</span><br><span class="line">&#123;&#123;<span class="string">"name"</span>,<span class="string">"T@\"NSString\",C,N"</span>&#125;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> __declspec(dllexport) <span class="class"><span class="keyword">struct</span> _<span class="title">class_t</span> <span class="title">OBJC_CLASS_</span>$_<span class="title">MyClass</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">category_t</span> _<span class="title">OBJC_</span>$_<span class="title">CATEGORY_MyClass_</span>$_<span class="title">MyAddition</span> __<span class="title">attribute__</span> ((<span class="title">used</span>, <span class="title">section</span> ("__<span class="title">DATA</span>,__<span class="title">objc_const</span>"))) =</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="string">"MyClass"</span>,</span><br><span class="line"><span class="number">0</span>, <span class="comment">// &amp;OBJC_CLASS_$_MyClass,</span></span><br><span class="line">(<span class="keyword">const</span> struct <span class="keyword">_method_list_t</span> *)&amp;_OBJC_$_CATEGORY_INSTANCE_METHODS_MyClass_$_MyAddition,</span><br><span class="line"><span class="number">0</span>,</span><br><span class="line"><span class="number">0</span>,</span><br><span class="line">(<span class="keyword">const</span> struct <span class="keyword">_prop_list_t</span> *)&amp;_OBJC_$_PROP_LIST_MyClass_$_MyAddition,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> OBJC_CATEGORY_SETUP_$_MyClass_$_MyAddition(<span class="keyword">void</span> ) &#123;</span><br><span class="line">_OBJC_$_CATEGORY_MyClass_$_MyAddition.cls = &amp;OBJC_CLASS_$_MyClass;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> section(<span class="meta-string">".objc_inithooks$B"</span>, long, read, write)</span></span><br><span class="line">__declspec(allocate(<span class="string">".objc_inithooks$B"</span>)) <span class="keyword">static</span> <span class="keyword">void</span> *OBJC_CATEGORY_SETUP[] = &#123;</span><br><span class="line">(<span class="keyword">void</span> *)&amp;OBJC_CATEGORY_SETUP_$_MyClass_$_MyAddition,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">class_t</span> *<span class="title">L_OBJC_LABEL_CLASS_</span>$ [1] __<span class="title">attribute__</span>((<span class="title">used</span>, <span class="title">section</span> ("__<span class="title">DATA</span>, __<span class="title">objc_classlist</span>,<span class="title">regular</span>,<span class="title">no_dead_strip</span>")))= &#123;</span></span><br><span class="line">&amp;OBJC_CLASS_$_MyClass,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">class_t</span> *_<span class="title">OBJC_LABEL_NONLAZY_CLASS_</span>$[] = &#123;</span></span><br><span class="line">&amp;OBJC_CLASS_$_MyClass,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">category_t</span> *<span class="title">L_OBJC_LABEL_CATEGORY_</span>$ [1] __<span class="title">attribute__</span>((<span class="title">used</span>, <span class="title">section</span> ("__<span class="title">DATA</span>, __<span class="title">objc_catlist</span>,<span class="title">regular</span>,<span class="title">no_dead_strip</span>")))= &#123;</span></span><br><span class="line">&amp;_OBJC_$_CATEGORY_MyClass_$_MyAddition,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a href="http://quotation.github.io/objc/2015/05/21/objc-runtime-ivar-access.html" target="_blank" rel="noopener">http://quotation.github.io/objc/2015/05/21/objc-runtime-ivar-access.html</a></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 Yelog
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/blog/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/blog/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 522px;
+    }
+    .nav.fullscreen {
+        margin-left: -522px;
+    }
+    .nav-left {
+        width: 100px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 472px;
+        }
+        .nav.fullscreen {
+            margin-left: -472px;
+        }
+        .nav-left {
+            width: 80px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 472px;
+            margin-left: -472px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+<div class="mobile-menus-out" >
+
+</div>
+<div class="mobile-menus">
+    
+    
+    
+    
+    <a class="dynamic-menu " target="_blank"  href="https://github.com/xieyahao">github</a>
+    
+</div>
+
+
+</html>
